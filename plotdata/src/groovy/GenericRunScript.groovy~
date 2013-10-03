@@ -1,0 +1,5 @@
+class GenericRunScript {
+  public static execute(def args) {
+    plintln "args=" + args.inspect()
+  }
+}

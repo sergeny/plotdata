@@ -1,0 +1,7 @@
+package com.sergeyorshanskiy.domain
+
+class DataPoint {
+    dou
+    static constraints = {
+    }
+}

@@ -12,6 +12,7 @@ import org.junit.*
 class DataPointTests {
 
     void testSomething() {
-       fail "Implement me"
+        DataPoint dp = com.sergeyorshanskiy.domain.DataPoint.getFactory().generate()
+        //      fail "Implement me"
     }
 }

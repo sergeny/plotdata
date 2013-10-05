@@ -34,7 +34,6 @@ import java.util.ArrayList
      * @return     Dictonary with [bid, ask] for each name, e.g. ["AAPL": [482.55, 482.74], "MSFT": [33.83, 33.85]]
      *
      */
-
     public static getBidAsk(ArrayList stocks) {
         def resultDict = [:]
         try
@@ -46,18 +45,19 @@ import java.util.ArrayList
             
 	        BufferedReader inp = new BufferedReader(new InputStreamReader(yc.getInputStream()));
             String inputLine;
-            def bid_ask_regex = ~/^([\d]+(.[\d]+)?),([\d]+(.[\d]+)?)[ ]*$/    // two comma-separated real numbers
+            def bid_ask_regex = ~/^(([\d]+(.[\d]+)?)|(N\/A)),(([\d]+(.[\d]+)?)|(N\/A))[ ]*$/    // two comma-separated real numbers; each can be N/A
 	        def iter = stocks.iterator()
             while ((inputLine = inp.readLine()) != null)
             {
                 // println inputLine
-		        assert inputLine ==~ bid_ask_regex, "Check if this URL correctly uses Yahoo finance csv api to retrieve \"bid,ask\": ${yahoofinance}; stocks:${stocks}"
-		        def l = inputLine.split(',')
 		        assert iter.hasNext()
-		        def stock=iter.next()
-		        resultDict[stock] = [l[0].toDouble(), l[1].toDouble()]
-            }
-	        assert !iter.hasNext()   // should read a line for each stock
+                def stock=iter.next()
+                assert inputLine ==~ bid_ask_regex, "Check if this URL correctly uses Yahoo finance csv api to retrieve \"bid,ask\": ${yahoofinance}; stocks:${stocks}"
+	            def l = inputLine.split(',')
+		        resultDict[stock] = [l[0]=='N/A' ? null : l[0].toDouble(), l[1]=='N/A' ? null : l[1].toDouble()]
+                
+            }    
+	        assert !iter.hasNext()   // there should be a line for each stock, nothing extra
             inp.close();
         } catch (IOException ex) {
 	        // Perhaps something is wrong with the Internet connection
@@ -66,13 +66,13 @@ import java.util.ArrayList
         return resultDict
     }
 
-    // TODO: make a JUnit test
-    // Note that the result of the test depends on whether you can connect to Yahoo Finance, so not exactly a "unit test" as it is
+     // TODO: make a JUnit test instead? 
+     // Note that the result of the test depends on whether you can connect to Yahoo Finance, so not exactly a "unit test" as it is
     public static void main(String [] args) {
         println "Testing itself..."   
         def map = getBidAsk(["AAPL", "MSFT", "GOOG"])
         if (map) {
-       	    map.each{ k, v -> println "${k}: bid=${v[0]}, ask=${v[1]}, aver=${(v[0]+v[1])/2}" }
+       	    map.each{ k, v -> println "${k}: bid=${v[0]}, ask=${v[1]}, aver=${(v[0] && v[1]) ? (v[0]+v[1])/2 : null}" }
         } else {
             println "Cannot retrieve data from Yahoo finance"
 	        System.exit(1)

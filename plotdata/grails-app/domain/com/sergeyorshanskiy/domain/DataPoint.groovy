@@ -34,6 +34,8 @@ class DataPoint {
 
 // ??? Grails will probably also inject methods into the factory classes, not just into domain classes. This should be fine.
 class DataPointTestFactory extends DataPointFactory {
+    // FIXME: this is just for debug. We really want to throw an exception here, because 
+    // if a child's class factory was incorrectly constructed, we may end up using this sample factory
     DataPoint generate() {
         new DataPoint(x: 2, y: 3)
     }

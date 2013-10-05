@@ -12,10 +12,6 @@ class StockPrice extends DataPoint {
     static StockPriceFactory getFactory(String ticker) {
         new StockPriceFactory(ticker);
     }
-
-    public static void main() {
-        println 'hello world!'
-    }
 }
 
 class StockPriceFactory extends DataPointFactory {
@@ -28,7 +24,13 @@ class StockPriceFactory extends DataPointFactory {
     
     StockPrice generate() {
         println "getting bid, ask for ${ticker}"
-        def l = YahooFinanceAPI.getBidAsk([ticker])
-        new StockPrice(ticker: this.ticker, x: 5, y: (l[0] + l[1]) / 2)
+        def l = YahooFinanceAPI.getBidAsk([ticker])[ticker]
+        if (l[0] || l[1]) { // at least the bid or the ask if defined
+            // if both are defined, average bid and ask. Otherwise use whatever is available
+            def price = l[0] ? (l[1] ? (l[0] + l[1]) / 2 : l[0]) : l[1] 
+            new StockPrice(ticker: this.ticker, x: 5, y: price)
+        } else {
+            return null
+        }
     }
 }

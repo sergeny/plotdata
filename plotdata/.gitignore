@@ -1,2 +1,4 @@
 *.class
+*.saved
 *~
+stacktrace.log

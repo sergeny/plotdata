@@ -79,8 +79,72 @@
 				}
 			}
 		</style>
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script
+		<script type="text/javascript"  src="http://code.highcharts.com/stock/highstock.js" ></script>
+		
+		<script type="text/javascript">
+		
+		function stockChart(ticker, divname) {
+		alert("stockChart ticker="+ticker+" divname="+divname)
+		$.getJSON('http://0.0.0.0:8000/example.json?ticker='+ticker, function(data) {
+			alert("got data");
+
+
+		$('#'+divname).highcharts('StockChart', {
+
+
+					rangeSelector : {
+						selected : 1
+					},
+
+					title : {
+						text : ticker+' Stock Price'
+					},
+
+					series : [{
+						name : ticker,
+						data : data,
+						tooltip: {
+							valueDecimals: 2
+						}
+					}]
+
+
+		})
+
+		}).done(function(d) {
+			alert("success, done");
+		}).fail(function(d) {
+			alert("fail");
+		}).always(function(d) {
+			alert("complete");
+		});
+		alert("ok");
+		}
+		stockChart('AAPL', 'container');
+		stockChart('ADBE', 'container2');
+
+		</script>
 	</head>
+	
+	        <body style="left:61px; top:31px; " >
+HELLO WORLD
+	<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
+	<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
+
+	<p></p>
+
+	<p></p></body></html>
+	
+	<!--
+	
+	
+	
 	<body>
+			<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
+			<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
+		
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div id="status" role="complementary">
 			<h1>Application Status</h1>
@@ -103,7 +167,7 @@
 			</ul>
 		</div>
 		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
+			<h1>Welcome to Grails2</h1>
 			<p>Congratulations, you have successfully started your first Grails application! At the moment
 			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
 			   content you may choose. Below is a list of controllers that are currently deployed in this application,
@@ -117,6 +181,9 @@
 					</g:each>
 				</ul>
 			</div>
+			
+		
 		</div>
 	</body>
 </html>
+-->

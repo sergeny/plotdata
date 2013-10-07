@@ -2,3 +2,4 @@
 *.saved
 *~
 stacktrace.log
+/target/

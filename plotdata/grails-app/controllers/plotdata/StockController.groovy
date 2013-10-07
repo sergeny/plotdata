@@ -3,12 +3,18 @@ package plotdata
 class StockController {
 
 // Content-type: application/json
-	def json(String ticker) {  
+	def json(String ticker) {   // return pure JSON, not JSONP
 		if (!ticker) { return; }
-		def result="//Price information for ${ticker}\n[\n" + 
-		"[1,2],\n[3,4]" + "\n]"
-		render(contentType: "application/json", text: result) 
-		
+		def result="""[
+		[1, 2],
+		[3, 4],
+		[5, 2]
+		]""" 
+		render(contentType: "application/json" /* "text/javascript" */, text: result) 
 	}
     
+	def index() {
+	
+		[:]
+	}
 }

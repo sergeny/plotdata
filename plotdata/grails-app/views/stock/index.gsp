@@ -29,7 +29,7 @@ if (window.jQuery) {
 
 function stockChart(ticker, divname) {
 	console.log("function stockChart(ticker:"+ticker+", divname:"+divname+")")
-	var url='stock/json?ticker='+ticker;
+	var url="json/"+ticker;
 	document.write("<a href=\"" + url +"\">JSON for "+ticker+"</a><br>")
 	console.log("Retrieving JSON from url:"+url);
 	$.getJSON(url, function(data) {

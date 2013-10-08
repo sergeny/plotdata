@@ -1,9 +1,12 @@
 package com.sergeyorshanskiy.domain
+import java.util.Date
 import groovy.transform.ToString
 
 /**
  * This GORM domain class represents a real numerical value at some period of time. 
- * For example, the CPU load yesterday at 4:34:23pm EST was 74.364%.
+ * Think about a single observation made by a scientist.
+ * For example, the CPU load was 74.364% yesterday at 2:34:23pm EST.
+ * Another example: Apple stock traded for $480.74 at the same moment in time.
  *
  * @author  Sergey Orshanskiy
  */
@@ -11,33 +14,19 @@ import groovy.transform.ToString
 
 @ToString
 class DataPoint {
-    double x
-    double y
-    static constraints = {
-    }
+    long time   // 64-bit Unix timestamp.
+	double value
 
-    // We cannot hide the constructor for a domain object. But consider using a factory to sample points.
-    // protected static DataPoint() {}
-
-    /**
-     * Prepare to sample DataPoints. Create a factory, then repeatedly call generate().
-     *
-     * @param   Additional info to prepare to sample data, e.g. the stock ticker to listen for. 
-     */
-    static DataPointFactory getFactory(Object param) {
-        new DataPointTestFactory()
-    }
-
-
-}
-
-
-// ??? Grails will probably also inject methods into the factory classes, not just into domain classes. This should be fine.
-class DataPointTestFactory extends DataPointFactory {
-    // FIXME: this is just for debug. We really want to throw an exception here, because 
-    // if a child's class factory was incorrectly constructed, we may end up using this sample factory
-    DataPoint generate() {
-        new DataPoint(x: 2, y: 3)
-    }
+	// We are only interested in points if they belong to some series.
+	// A particular time-value pair is meaningless by itself.
+	static belongsTo = [series: TimeSeries] 
+	
+    static constraints = {    		
+	}
+	
+	DataPoint(double value) {
+		time = new Date().getTime()
+		this.value = value
+	}
 }
 

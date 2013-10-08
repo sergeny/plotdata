@@ -1,20 +1,27 @@
 package plotdata
 
+import com.sergeyorshanskiy.domain.StockSeries;
+
+
 class StockController {
 
-// Content-type: application/json
-	def json(String ticker) {   // return pure JSON, not JSONP
-		if (!ticker) { return; }
-		def result="""[
-		[1, 2],
-		[3, 4],
-		[5, 2]
-		]""" 
-		render(contentType: "application/json" /* "text/javascript" */, text: result) 
+
+	def json(String ticker, long strictlyafter) {   // return pure JSON, not JSONP
+		println "json " + strictlyafter + params
+		def series = StockSeries.findByTicker(ticker)   // No problem even if ticker is nul
+		if (series) {
+			assert( 0 > null )   // If strictlyAfter is not defined, pick everything
+			render (contentType: "application/json") {
+				series.points.findAll{ it.time > strictlyafter }.sort{ it.time }.collect{[it.time, it.value]}
+			}
+		} else {
+			response.status = 404
+			render "No data is available for ticker "+ticker
+			return
+		}	
 	}
     
 	def index() {
-	
 		[:]
 	}
 }

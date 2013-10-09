@@ -11,4 +11,12 @@ class StockSeries extends TimeSeries {
     static constraints = {
 		ticker(unique: true)
     }
+
+	void generate() {
+		super.generate(7)
+	}
+
+	public String toString() {
+		return "${this.class.name} : ${this.id}, ticker: ${ticker}"   // Cannot use super.toString(), wrong type
+	}
 }

@@ -17,7 +17,8 @@ class TimeSeries {
 	
 	// Add a new point: current timestamp, specified value.
 	void generate(double value) {
-		addToPoints(new DataPoint(value))
-		// Purposely not calling save() here. 
+		addToPoints(time:1, value:2)
+		save()
 	}
+	
 }

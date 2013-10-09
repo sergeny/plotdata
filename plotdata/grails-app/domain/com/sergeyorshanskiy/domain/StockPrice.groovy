@@ -9,11 +9,8 @@ class StockPrice extends DataPoint {
     static constraints = {
     }
 
-    static StockPriceFactory getFactory(String ticker) {
-        new StockPriceFactory(ticker);
-    }
 }
-
+/*
 class StockPriceFactory extends DataPointFactory {
 
     String ticker; // Stock ticker, e.g. "AMZN" or "MSFT"
@@ -34,3 +31,4 @@ class StockPriceFactory extends DataPointFactory {
         }
     }
 }
+*/

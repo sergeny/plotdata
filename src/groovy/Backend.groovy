@@ -7,7 +7,9 @@ println "Welcome to the backend"
 def cli = new CliBuilder(usage:"groovy ${this.class.name}.groovy [options]")
 cli.h(longOpt:'help', 'Print this message')
 cli.c(longOpt: 'config', args:1, argName:'config', 'Configuration file, e.g. BackendConfig.groovy')
+cli.f(longOpt: 'freq', args:1, argName:'freq', 'Frequency: will post updates each that many ms' )
 cli(longOpt: 'create-tables', 'Create tables in the database')
+cli(longOpt: 'run', 'Run the backend server')
 def options = cli.parse(args)
 assert options // would be null (false) on failure
 if (options.h) {
@@ -36,3 +38,19 @@ if (options.'create-tables') {
                 println it
 
             }
+
+if (options.'run') {
+	println 'Starting the backend server...'
+	def freq=options.f ? options.f : 1000
+	println "Will publish updates every ${freq} ms"
+	def update = script.dataToUpdate()
+
+    if (update["local"]) {
+        update["local"].each { 
+            k, v -> println "${k}, ${v()}"
+        }
+    }
+
+	println update["stock"]
+
+}

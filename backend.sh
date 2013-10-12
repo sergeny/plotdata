@@ -1,3 +1,3 @@
 #!/bin/bash
 
-groovy src/groovy/Backend.groovy -c BackendConfig_development.groovy $*
+groovy -classpath src/groovy/ src/groovy/Backend.groovy -c BackendConfig_development.groovy $*

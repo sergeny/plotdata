@@ -131,7 +131,7 @@ def dataToUpdate() {
     [
         "local": 
             ["always five": {return 5},
-             "timestamp":   new Date().getTime ],
+             "timestamp":   {new Date().getTime()} ],
         "stock":
             null
     ]

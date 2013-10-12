@@ -23,7 +23,7 @@ println "Config: ${options.config}"
 
 GroovyShell shell = new GroovyShell()
 def script = shell.parse(new File(options.config))
-def sql = script.connectToSQL()
+def sql = script.connectToSql()
 
 if (options.'create-tables') {
 	println "Create tables"

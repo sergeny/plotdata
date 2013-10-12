@@ -25,7 +25,7 @@ def script = shell.parse(new File(options.config))
 def sql = script.connectToSQL()
 
 
-def sql = connectToSQL()
+
                 sql.eachRow("SHOW DATABASES") {
 
                 println it

@@ -14,6 +14,14 @@ includeTargets << grailsScript("_GrailsInit") << grailsScript("_GrailsArgParsing
 target(main: "Configure database access for the backend") {
 
 def env = Environment.current.getName()
+
+// This script will create a config and put it in the file name ${CONFIG_FILENAME}
+// The user can specify a different config file name as the first command-line parameter
+String CONFIG_FILENAME = "BackendConfig_${env}.groovy"
+if (argsMap['params']) {
+    CONFIG_FILENAME=argsMap['params'][0]
+}
+
 println "Current environment: ${env}"
 println "Parsing DataSource.groovy for database connectivity settings"
 def config
@@ -44,7 +52,6 @@ def _password = ConfigurationHolder.config.dataSource.password
 def _driver   = ConfigurationHolder.config.dataSource.driverClassName 
 */
 
-    // def list=argsMap['params']
 
     def sql
 	// Let's try to catch exceptions to explain what's wrong
@@ -81,12 +88,11 @@ def _driver   = ConfigurationHolder.config.dataSource.driverClassName
 	// this.class.classLoader.rootLoader.addURL( new URL(\"file://${jarFile}\" ) )"
 	
 	
-	String filename = "BackendConfig_${env}.groovy"
 	
-	println "Writing config to ${filename}..."
-	File file = new File(filename)
+	println "Writing config to ${CONFIG_FILENAME}..."
+	File file = new File(CONFIG_FILENAME)
 	if (file.exists()) {
-		System.err << " A file or a directory ${filename} already exists, aborted!" 
+		System.err << " A file or a directory ${CONFIG_FILENAME} already exists, aborted!" 
 		System.exit(10)
 	}
 
@@ -137,7 +143,7 @@ sql.eachRow(\"SHOW DATABASES\") {
     println it
 }"""
 
-println "Success! Test the result by running: groovy ${filename}"
+println "Success! Test the result by running: groovy ${CONFIG_FILENAME}"
 	
 
 }

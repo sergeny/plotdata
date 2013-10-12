@@ -19,4 +19,5 @@ grailsw test-configure-backend
 This will first of all test connection to the database, so you will know if your DataSource.groovy is correctly configured.
 Then it will create a configuration script for the backend. By default this file will be created in the same (current) directory,
 and if you run it as a groovy script, it will also test the connection.
-
+You can also specify an alternative name for this file, e.g.
+grailsw configure-backend /etc/BackendConfig.groovy

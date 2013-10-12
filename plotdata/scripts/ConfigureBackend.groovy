@@ -77,11 +77,25 @@ def _driver   = ConfigurationHolder.config.dataSource.driverClassName
 	// File jarFile = new File(codeSource.getLocation().toURI().getPath())
 	// this.class.classLoader.rootLoader.addURL( new URL(\"file://${jarFile}\" ) )"
 	
-	println "this.class.classLoader.rootLoader.addURL(\"${StringEscapeUtils.escapeJava("" + codeSource.getLocation())}\")"
-	println "def sql = Sql.newInstance(\"${_url}\", \"${_username}\", \"${_password}\", \"${_driver}\")"
-	println "sql.eachRow(\"SHOW DATABASES\") {"
-	println "  println it"
-	println "}"
+	
+	String filename = "BackendConfig_${env}.groovy"
+	
+	println "Writing config to ${filename}..."
+	File file = new File(filename)
+	if (file.exists()) {
+		System.err << " A file or a directory ${filename} already exists, aborted!" 
+		System.exit(10)
+	}
+
+	
+	file <<"""import groovy.sql.Sql\n\n
+	        this.class.classLoader.rootLoader.addURL(new URL(\"${StringEscapeUtils.escapeJava("" + codeSource.getLocation())}\") )\n
+	        def sql = Sql.newInstance(\"${_url}\", \"${_username}\", \"${_password}\", \"${_driver}\")\n
+	        sql.eachRow(\"SHOW DATABASES\") {\n
+	        println it\n
+            }\n"""
+
+	println "Success! Test the result by running: groovy ${filename}"
 	
 
 }

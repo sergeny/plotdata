@@ -6,6 +6,9 @@ import groovy.json.StringEscapeUtils
 // import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 
+def SERIES_TABLE='series'
+def POINTS_TABLE='points'
+
 includeTargets << grailsScript("_GrailsInit") << grailsScript("_GrailsArgParsing") 
 
 target(main: "Configure database access for the backend") {
@@ -100,7 +103,7 @@ def connectToSql() {
 }
 
 def createTables(sql) {
-    sql.execute \"\"\" CREATE TABLE `series` (
+    sql.execute \"\"\" CREATE TABLE `${SERIES_TABLE}` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
     `type` varchar(255) DEFAULT NULL,
@@ -108,13 +111,13 @@ def createTables(sql) {
     UNIQUE KEY  (`name`, `type`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1\"\"\"
 
-    sql.execute \"\"\" CREATE TABLE `points` (
-    `series_id` bigint(20) NOT NULL,
+    sql.execute \"\"\" CREATE TABLE `${POINTS_TABLE}` (
+    `${SERIES_TABLE}_id` bigint(20) NOT NULL,
     `time` bigint(20) NOT NULL,
     `value` double NOT NULL,
     PRIMARY KEY (`time`),
-    KEY  (`series_id`),
-    CONSTRAINT FOREIGN KEY (`series_id`) REFERENCES `series` (`id`)
+    KEY  (`${SERIES_TABLE}_id`),
+    CONSTRAINT FOREIGN KEY (`${SERIES_TABLE}_id`) REFERENCES `${SERIES_TABLE}` (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=19535 DEFAULT CHARSET=latin1\"\"\"
 }
 

@@ -107,6 +107,15 @@ def createTables(sql) {
     PRIMARY KEY (`id`),
     UNIQUE KEY  (`name`, `type`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1\"\"\"
+
+    sql.execute \"\"\" CREATE TABLE `points` (
+    `series_id` bigint(20) NOT NULL,
+    `time` bigint(20) NOT NULL,
+    `value` double NOT NULL,
+    PRIMARY KEY (`time`),
+    KEY  (`series_id`),
+    CONSTRAINT FOREIGN KEY (`series_id`) REFERENCES `time_series` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=19535 DEFAULT CHARSET=latin1\"\"\"
 }
 
 def dataToUpdate() {

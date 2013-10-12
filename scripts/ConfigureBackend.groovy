@@ -87,15 +87,45 @@ def _driver   = ConfigurationHolder.config.dataSource.driverClassName
 		System.exit(10)
 	}
 
-	
-	file <<"""import groovy.sql.Sql\n\n
-	        this.class.classLoader.rootLoader.addURL(new URL(\"${StringEscapeUtils.escapeJava("" + codeSource.getLocation())}\") )\n
-	        def sql = Sql.newInstance(\"${_url}\", \"${_username}\", \"${_password}\", \"${_driver}\")\n
-	        sql.eachRow(\"SHOW DATABASES\") {\n
-	        println it\n
-            }\n"""
 
-	println "Success! Test the result by running: groovy ${filename}"
+
+	
+	file <<"""
+import groovy.sql.Sql
+
+def connectToSql() {
+	this.class.classLoader.rootLoader.addURL(new URL(\"${StringEscapeUtils.escapeJava("" + codeSource.getLocation())}\") )
+	sql = Sql.newInstance(\"${_url}\", \"${_username}\", \"${_password}\", \"${_driver}\")
+	return sql
+}
+
+def createTables(sql) {
+    sql.execute \"\"\" CREATE TABLE `series` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL,
+    `type` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY  (`name`, `type`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1\"\"\"
+}
+
+def dataToUpdate() {
+    [
+        "local": 
+            ["always five": {return 5},
+             "timestamp":   new Date().getTime ],
+        "stock":
+            null
+    ]
+}
+
+			
+def sql = connectToSql()			
+sql.eachRow(\"SHOW DATABASES\") {
+    println it
+}"""
+
+println "Success! Test the result by running: groovy ${filename}"
 	
 
 }

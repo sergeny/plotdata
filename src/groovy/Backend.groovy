@@ -1,4 +1,6 @@
+import static.java.util.concurrent.TimeUnit.*
 import groovy.util.CliBuilder
+
 
 println "Welcome to the backend"
 
@@ -28,12 +30,18 @@ def script = shell.parse(new File(options.config))
 def sql = script.connectToSql()
 
 if (options.'create-tables') {
+	if (options.run) {
+		System.err << "Error: Cannot combine --create-tables with --run\n"
+		System.exit(2)
+	}
 	println "Create tables"
 	script.createTables(sql)
+	// Exit the script after creating tables.
+	// This is simpler and more reliable. Do not try to start the server at the same time.
 	return
 }
 
-                sql.eachRow("SHOW DATABASES") {
+            sql.eachRow("SHOW DATABASES") {
 
                 println it
 
@@ -52,5 +60,14 @@ if (options.'run') {
     }
 
 	println update["stock"]
-
+	
+	BackendTask task = new BackendTask()
+	
+	// watch the execution in case there is an exception that kills the thread
+	BackendWatchdog watchdog = new BackendWatchdog(task)
+	println "${task} ${watchdog}"
+	while (true) {
+		Thread.sleep(500)
+		println "Total: ${watchdog.getTask().getTotal()}"
+	}
 }

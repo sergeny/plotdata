@@ -18,6 +18,7 @@ public class BackendTask {
 
 	private int period // Execute every that many milliseconds
     private def update // Data to update - probably a dictionary with dictionaries of groovy closures
+	private def connectToSql // Closure; when called, returns "sql", a new groovy.sql.Sql instance
 	private int total, startTotal;
     private ScheduledExecutorService executor;
     private ScheduledFuture future;
@@ -29,14 +30,16 @@ public class BackendTask {
     /**
      * Construct the task with the given total - useful to restore its state as needed.
      */
-    public BackendTask(def dataToUpdate, int period) {
+    public BackendTask(def dataToUpdate, int period, def connectToSql) {
 		this.period = period
 		update = dataToUpdate
+		this.connectToSql = connectToSql 
         total = 0;
         startTotal = total;
         start();
     }
 
+	// NB! When adding fields to BackendTask, remember to update here
 	public BackendTask restartItself() {
 		return new BackendTask(this.update, this.period)
 	}
@@ -71,8 +74,33 @@ public class BackendTask {
   
 	// e.g. type is "local", name is "cpu" or 
 	// type is "stock", name is "AAPL"
-	private int seriesId(String seriesType, String seriesName) {
-		return 1
+	private long seriesId(def sql, String seriesType, String seriesName) {
+		
+		sql.eachRow("SELECT id FROM series") { println "ROW $it"}
+		def rows
+		// Here we want to catch problems right away and to fix asap. So print any exceptions before they go to the ExecutorService.
+		try {
+			for (attempt in [0, 1]) { // Select. If not there --- insert, then select again.
+				rows = sql.rows("SELECT id from `$SERIES_TABLE` WHERE type=? AND name=?", [seriesType, seriesName]) 
+		
+				assert rows.size() <= 1, "At most one row: (type, series) should be unique, and neither can be NULL"
+				assert (rows.size() == 1) || (attempt == 0), "If this is our second attempt, we should have already inserted"
+			
+				if (rows.size() == 0) { // No such series; insert
+					println "Adding new series: type: ${seriesType}, name: ${seriesName}"
+					def result = sql.execute "INSERT INTO ${SERIES_TABLE} (type, name) VALUE (?, ?)", [seriesType, seriesName]
+					assert (sql.updateCount == 1)   // Inserted one row
+				}
+			}
+			
+			assert rows.size() == 1
+			assert "id" in rows[0]
+			
+			return rows[0]["id"]
+		} catch (Throwable e) { 
+			println "$e"
+			throw e
+		}
 	}
 
     private class TheTask implements Runnable {	
@@ -96,13 +124,16 @@ public class BackendTask {
 		
 			println "${new_values}"
 			
+			def sql = this.connectToSql()
 			new_values.each {
 				s_type, d -> d.each {
 					name, p ->  // p[0] - timestamp, p[1] - value
-						println "INSERT ${SERIES_TABLE}_id=${seriesId(s_type, name)} " +			
-						"${p}"//	"time=${l[0]} value=${l[1]}"
+						// The JDBC '?'-syntax protects against SQL injection
+						int params = [seriesId(sql, s_type, name)] + p // Important to call seriesId, which does SELECT and/or INSERT, before doing INSERT
+						sql.execute "INSERT INTO ${POINTS_TABLE} (${SERIES_TABLE}_id, time, value) VALUE (?, ?, ?)", params
 				}
 			}
+			sql.close()
 		
 			// update object state on each execution
             total++;

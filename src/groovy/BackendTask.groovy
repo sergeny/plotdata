@@ -76,10 +76,9 @@ public class BackendTask {
 	// type is "stock", name is "AAPL"
 	private long seriesId(def sql, String seriesType, String seriesName) {
 		
-		sql.eachRow("SELECT id FROM series") { println "ROW $it"}
-		def rows
 		// Here we want to catch problems right away and to fix asap. So print any exceptions before they go to the ExecutorService.
 		try {
+			def rows
 			for (attempt in [0, 1]) { // Select. If not there --- insert, then select again.
 				rows = sql.rows("SELECT id from `$SERIES_TABLE` WHERE type=? AND name=?", [seriesType, seriesName]) 
 		
@@ -124,16 +123,23 @@ public class BackendTask {
 		
 			println "${new_values}"
 			
+			try {
 			def sql = this.connectToSql()
 			new_values.each {
 				s_type, d -> d.each {
 					name, p ->  // p[0] - timestamp, p[1] - value
 						// The JDBC '?'-syntax protects against SQL injection
-						int params = [seriesId(sql, s_type, name)] + p // Important to call seriesId, which does SELECT and/or INSERT, before doing INSERT
+						def params = [seriesId(sql, s_type, name)] + p // Important to call seriesId, which does SELECT and/or INSERT, before doing INSERT
+						println "READY TO INSERT $params"
 						sql.execute "INSERT INTO ${POINTS_TABLE} (${SERIES_TABLE}_id, time, value) VALUE (?, ?, ?)", params
+						println "inserted $sql.updateCount"
 				}
 			}
 			sql.close()
+			} catch (Throwable t) {
+				println "$t"
+				throw t
+			}
 		
 			// update object state on each execution
             total++;

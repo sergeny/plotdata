@@ -12,27 +12,33 @@ import java.util.concurrent.TimeUnit
 
 public class BackendTask {
  
+	private int period // Execute every that many milliseconds
     private int total, startTotal;
     private ScheduledExecutorService executor;
     private ScheduledFuture future;
  
     public BackendTask() {
-        this(0);
+        this(1000);
     }
  
     /**
      * Construct the task with the given total - useful to restore its state as needed.
      */
-    public BackendTask(int theTotal) {
-        total = theTotal;
+    public BackendTask(int period) {
+		this.period = period
+        total = 0;
         startTotal = total;
         start();
     }
+
+	public getPeriod() {
+		return period;
+	}
  
     private void start() {
-        // start immediately, repeat every 300 ms
+        // start immediately, repeat every ${period} ms
         executor = Executors.newSingleThreadScheduledExecutor();
-        future = executor.scheduleAtFixedRate(new TheTask(), 0, 300, TimeUnit.MILLISECONDS);
+        future = executor.scheduleAtFixedRate(new TheTask(), 0, period, TimeUnit.MILLISECONDS);
     }
  
     /**

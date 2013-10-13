@@ -37,12 +37,8 @@ public class BackendTask {
         start();
     }
 
-	public getDataToUpdate() {
-		return update;
-	}
-
-	public getPeriod() {
-		return period;
+	public BackendTask restartItself() {
+		return new BackendTask(this.update, this.period)
 	}
  
     private void start() {

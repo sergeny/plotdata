@@ -32,9 +32,7 @@ public class BackendWatchdog {
                     task.cancel(true);
                     task.shutdown();
                     // restart from where we left off - state gets restored:
-					def update = task.getDataToUpdate()
-                    int period = task.getPeriod();
-                    task = new BackendTask(update, period);
+					task = task.restartItself()
                 }
             //}
         }

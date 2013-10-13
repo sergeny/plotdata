@@ -24,6 +24,8 @@ grailsw configure-backend /etc/BackendConfig.groovy
 
 7. Use the script backend.sh to create tables in the SQL database:
 ./backend.sh --create-tables
+Also check out
+./backend.sh -h or ./backend.sh --help
 
 8. Run the server:
 ./backend.sh --run

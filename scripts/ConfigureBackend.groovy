@@ -121,7 +121,7 @@ def createTables(sql) {
     `${SERIES_TABLE}_id` bigint(20) NOT NULL,
     `time` bigint(20) NOT NULL,
     `value` double NOT NULL,
-    PRIMARY KEY (`time`),
+    PRIMARY KEY (`${SERIES_TABLE}_id`, `time`),
     KEY  (`${SERIES_TABLE}_id`),
     CONSTRAINT FOREIGN KEY (`${SERIES_TABLE}_id`) REFERENCES `${SERIES_TABLE}` (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=19535 DEFAULT CHARSET=latin1\"\"\"

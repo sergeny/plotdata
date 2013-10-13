@@ -80,17 +80,77 @@
 			}
 		</style>
 		
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script
-		<script type="text/javascript"  src="http://code.highcharts.com/stock/highstock.js" ></script>
+
+
+
+
+
+<!--			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
+			<script type="text/javascript"  src="http://code.highcharts.com/stock/highstock.js" ></script>-->
+			<!-- we may be offline.. backup -->
+			<g:javascript library="jquery"/>
+			<g:javascript src="Highstock-1/js/highstock.js" />
+				<g:javascript src="Highstock-1/js/modules/exporting.js" />
+<!--			<script type="text/javascript" src="/Users/macowner/.grails//2.2.3/projects/plotdata/plugins/jquery-1.8.3/web-app/js/jquery/jquery-1.8.3.min.js" />-->
+			<script type="text/javascript" >
+
+
+		
+		</script>
+
 		
 		<script type="text/javascript">
+	
 		
-		function stockChart(ticker, divname) {
-		alert("stockChart ticker="+ticker+" divname="+divname)
-		$.getJSON('http://0.0.0.0:8000/example.json?ticker='+ticker, function(data) {
-			alert("got data");
+	
+	//	stockChart('AAPL', 'container');
+	//	stockChart('ADBE', 'container2');
 
+		</script>
+	</head>
+	
+	     
+	
+	
+	<body>
 
+<script type="text/javascript">
+alert("test")
+	if (window.jQuery) {
+	        console.log("jQuery is now loaded"); // What if loaded multiple times?
+	} else {
+	        console.error("Cannot load jQuery");
+	
+	}
+	
+	function showSeries(i) {
+		alert("show series:"+i)
+	}
+	
+	$.getJSON('series/json', function(data) {
+	var s='<table>'
+	for (var i=0; i<data.length; i++) {
+		s += '<tr onclick="showSeries('+data[i].id+')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
+	}
+	s+='</table>'
+	$('#series-list').html(s)
+		//document.write("HELLO<b1>HI</b1>")
+		//document.writeln("got data "+data)
+	}).done(function(d) {
+			alert("success, done");
+		}).fail(function(d) {
+			alert("fail");
+		}).always(function(d) {
+			alert("complete");
+		});
+	
+	
+	
+		function seriesChart(divname) {
+	
+		alert("stockChart divname="+divname)
+		$.getJSON('stock/json/ADBE', function(data) {
+			alert("got data"+data);
 		$('#'+divname).highcharts('StockChart', {
 
 
@@ -99,11 +159,11 @@
 					},
 
 					title : {
-						text : ticker+' Stock Price'
+						text : ' Stock Price'
 					},
 
 					series : [{
-						name : ticker,
+						name : 'my series',
 						data : data,
 						tooltip: {
 							valueDecimals: 2
@@ -121,30 +181,15 @@
 			alert("complete");
 		});
 		alert("ok");
-		}
-		stockChart('AAPL', 'container');
-		stockChart('ADBE', 'container2');
-
+	}
+	seriesChart('container')
+	
+	
 		</script>
-	</head>
-	
-	        <body style="left:61px; top:31px; " >
-HELLO WORLD
-	<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
-	<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
-
-	<p></p>
-
-	<p></p></body></html>
-	
-	<!--
-	
-	
-	
-	<body>
+	<!--	
 			<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
 			<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
-		
+		-->
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div id="status" role="complementary">
 			<h1>Application Status</h1>
@@ -182,8 +227,10 @@ HELLO WORLD
 				</ul>
 			</div>
 			
+			<div id="series-list" role="navigation">
+			</div>
+	<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
 		
 		</div>
 	</body>
 </html>
--->

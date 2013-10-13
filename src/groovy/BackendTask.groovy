@@ -2,6 +2,7 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.codehaus.groovy.runtime.MethodClosure
 
 
 // BackendTask.groovy and BackendWatchdog.groovy
@@ -23,14 +24,13 @@ public class BackendTask {
     private ScheduledExecutorService executor;
     private ScheduledFuture future;
  
-    public BackendTask(def dataToUpdate) {
-        this(dataToUpdate, 1000);
-    }
- 
+  
+
+
     /**
      * Construct the task with the given total - useful to restore its state as needed.
      */
-    public BackendTask(def dataToUpdate, int period, def connectToSql) {
+    public BackendTask(def dataToUpdate, int period, MethodClosure connectToSql) {
 		this.period = period
 		update = dataToUpdate
 		this.connectToSql = connectToSql 
@@ -39,9 +39,10 @@ public class BackendTask {
         start();
     }
 
-	// NB! When adding fields to BackendTask, remember to update here
+	
 	public BackendTask restartItself() {
-		return new BackendTask(this.update, this.period)
+		// Note: If for whatever reason there is no matching constructor, a real-time exception will be thrown, to be caught by BackendWatchdog
+		return new BackendTask(this.update, this.period, this.connectToSql)
 	}
  
     private void start() {

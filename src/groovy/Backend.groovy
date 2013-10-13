@@ -49,7 +49,16 @@ if (options.'create-tables') {
 
 if (options.'run') {
 	println 'Starting the backend server...'
-	def freq=options.f ? options.f : 1000
+	int freq
+	try {
+		freq=options.f ? Integer.parseInt(options.f) : 1000
+	} catch (java.lang.NumberFormatException e) {
+		freq = -1 // invalidate	
+	}
+	if (freq <= 0) {
+		System.err <<"Error: The option -f requires a positive integer, the number of milliseconds\n"
+		System.exit(3)
+	}
 	println "Will publish updates every ${freq} ms"
 	def update = script.dataToUpdate()
 
@@ -61,7 +70,7 @@ if (options.'run') {
 
 	println update["stock"]
 	
-	BackendTask task = new BackendTask()
+	BackendTask task = new BackendTask(freq)
 	
 	// watch the execution in case there is an exception that kills the thread
 	BackendWatchdog watchdog = new BackendWatchdog(task)

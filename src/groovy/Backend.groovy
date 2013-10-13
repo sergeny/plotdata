@@ -10,8 +10,8 @@ def cli = new CliBuilder(usage:"groovy ${this.class.name}.groovy [options]")
 cli.h(longOpt:'help', 'Print this message')
 cli.c(longOpt: 'config', args:1, argName:'config', 'Configuration file, e.g. BackendConfig.groovy')
 cli.f(longOpt: 'freq', args:1, argName:'freq', 'Frequency: will post updates each that many ms' )
-cli(longOpt: 'create-tables', 'Create tables in the database')
-cli(longOpt: 'run', 'Run the backend server')
+cli._(longOpt: 'create-tables', 'Create tables in the database')
+cli._(longOpt: 'run', 'Run the backend server')
 def options = cli.parse(args)
 assert options // would be null (false) on failure
 if (options.h) {

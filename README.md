@@ -23,10 +23,11 @@ and/or for a particular environment.
 7. Here you will see if your configuration is working.
 Autoatically configure the backend by running "grailsw configure-backend" from the main grails directory.
 You can also specify one of
+```shell
 ./grailsw dev configure-backend
 ./grailsw prod configure-backend
 ./grailsw test-configure-backend
-
+```
 This will first of all test connection to the database, so you will know if your DataSource.groovy is correctly configured.
 Then it will create a configuration script for the backend. By default this file will be created in the same (current) directory,
 and if you run it as a groovy script, it will also test the connection.
@@ -34,16 +35,19 @@ You can also specify an alternative name for this file, e.g.
 grailsw configure-backend /etc/BackendConfig.groovy
 
 8. Use the script backend.sh to create tables in the SQL database:
+```shell
 ./backend.sh --create-tables
+```
 Also check out
+```shell
 ./backend.sh -h or ./backend.sh --help
+```
 
 9. Run the server:
 ./backend.sh --run
 By default you will be using BackendConfig_production.groovy in the current directory that was perhaps created at step 6.
 You can also specify a different file:
 ./backend.sh -c /etc/BackendConfig.groovy --run
-
 DO NOT RUN MULTIPLE BACKEND SERVERS AT THE SAME TIME. 
 
 10. Stop the server with Ctrl+C (so far there is no other option)

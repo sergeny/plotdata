@@ -31,8 +31,12 @@ public class BackendWatchdog {
                     //  cancel the task and shutdown the executor
                     task.cancel(true);
                     task.shutdown();
-                    // restart from where we left off - state gets restored:
-					task = task.restartItself()
+					try {
+                    	// restart from where we left off - state gets restored:
+						task = task.restartItself()
+					} catch (Exception e) {
+						System.err <<"ERROR. TASK RESTART FAILED " << e
+					}
                 }
             //}
         }

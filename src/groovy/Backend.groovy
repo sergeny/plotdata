@@ -46,6 +46,7 @@ if (options.'create-tables') {
                 println it
 
             }
+sql.close()
 
 if (options.'run') {
 	println 'Starting the backend server...'
@@ -70,7 +71,7 @@ if (options.'run') {
 
 	println update["stock"]
 	
-	BackendTask task = new BackendTask(update, freq)
+	BackendTask task = new BackendTask(update, freq, script.&connectToSql)
 	
 	// watch the execution in case there is an exception that kills the thread
 	BackendWatchdog watchdog = new BackendWatchdog(task)

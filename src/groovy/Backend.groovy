@@ -70,7 +70,7 @@ if (options.'run') {
 
 	println update["stock"]
 	
-	BackendTask task = new BackendTask(freq)
+	BackendTask task = new BackendTask(update, freq)
 	
 	// watch the execution in case there is an exception that kills the thread
 	BackendWatchdog watchdog = new BackendWatchdog(task)

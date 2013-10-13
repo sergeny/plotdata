@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit
 public class BackendWatchdog {
  
     private BackendTask task;
- 
+
+
     public BackendWatchdog(BackendTask theTask) {
         task = theTask;
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Watcher(), 0, 200, TimeUnit.MILLISECONDS);
@@ -32,8 +33,8 @@ public class BackendWatchdog {
                     task.cancel(true);
                     task.shutdown();
                     // restart from where we left off - state gets restored:
-                    int lastKnownState = task.getTotal();
-                    task = new BackendTask(lastKnownState);
+                    int period = task.getPeriod();
+                    task = new BackendTask(period);
                 }
             }
         }

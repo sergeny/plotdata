@@ -111,8 +111,8 @@ def connectToSql() {
 def createTables(sql) {
     sql.execute \"\"\" CREATE TABLE `${SERIES_TABLE}` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL,
-    `type` varchar(255) DEFAULT NULL,
+    `name` varchar(255) NOT NULL,   /* name and type have to be not null */
+    `type` varchar(255) NOT NULL,   /* so that (name, type) is a truly unique pair */
     PRIMARY KEY (`id`),
     UNIQUE KEY  (`name`, `type`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1\"\"\"
@@ -131,7 +131,9 @@ def dataToUpdate() {
     [
         "local": 
             ["always five": {return 5},
-             "timestamp":   {new Date().getTime()} ],
+             "timestamp":   {new Date().getTime()},
+             "freemem":     {Runtime.getRuntime().freeMemory()},
+             "random":      {new Random().nextInt(10)} ],
         "stock":
             null
     ]

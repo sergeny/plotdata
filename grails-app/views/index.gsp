@@ -88,30 +88,7 @@
 			}
 		</style>
 		
-
-
-
-
-
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
-
-				 <!--"Highstock-1/js/modules/exporting.js"-->
-<!--			<script type="text/javascript" src="/Users/macowner/.grails//2.2.3/projects/plotdata/plugins/jquery-1.8.3/web-app/js/jquery/jquery-1.8.3.min.js" />-->
-			<script type="text/javascript" >
-
-
-		
-		</script>
-
-		
-		<script type="text/javascript">
 	
-		
-	
-	//	stockChart('AAPL', 'container');
-	//	stockChart('ADBE', 'container2');
-
-		</script>
 	</head>
 	
 	     
@@ -119,119 +96,7 @@
 	
 	<body>
 
-<script type="text/javascript">
 
-
-function loadScript(url, onsuccess, onerror) {
-$.get(url)
-    .done(function() {
-        // File/url exists
-        console.log("JS Loader: file exists, executing $.getScript "+url)
-        $.getScript(url, function() {
-            if (onsuccess) {
-                console.log("JS Loader: Ok, loaded. Calling onsuccess() for " + url);
-                onsuccess();
-                console.log("JS Loader: done with onsuccess() for " + url);
-            } else {
-                console.log("JS Loader: Ok, loaded, no onsuccess() callback " + url)
-            }
-        });
-    }).fail(function() {
-            // File/url does not exist
-            if (onerror) {
-                console.error("JS Loader: probably 404 not found. Not calling $.getScript. Calling onerror() for " + url);
-                onerror();
-                console.error("JS Loader: done with onerror() for " + url);
-            } else {
-                console.error("JS Loader: probably 404 not found. Not calling $.getScript. No onerror() callback " + url);
-            }
-    });
-}
-
-//loadScript("http://localhost:8080/plotdata/static/js/Highstock-1/js/highstock.js");
-	if (window.jQuery) {
-	        console.log("jQuery is now loaded"); // What if loaded multiple times?
-	} else {
-	        console.error("Cannot load jQuery");
-	
-	}
-	
-	function showSeries(i) {
-		seriesChart('container', i)
-	}
-	
-	$.getJSON('series/json', function(data) {
-	var s='<table>'
-	for (var i=0; i<data.length; i++) {
-		s += '<tr onclick="showSeries('+data[i].id+')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
-	}
-	s+='</table>';
-    /*var tbl = document.createElement("table");
-	tbl.setAttribute("border", "2");
-	var tbody = document.createElement("tbody");
-	tbl.appendChild(tbody);
-	var row = document.createElement("tr");
-	tbody.appendChild(row);
-	var cell = document.createElement("td");
-	row.appentChild(cell);
-	cell.appendChild(document.createTextNode("hello, world!"));*/
-/*	document.getElementById("series-list").apendChild("test");
-	alert(""+document.getElementById("container"));*/
-	
-	$('#series-list').html(s)
-		//document.write("HELLO<b1>HI</b1>")
-		//document.writeln("got data "+data)
-	}).done(function(d) {
-			console.log("success, done");
-		}).fail(function(d) {
-			console.error("fail");
-		}).always(function(d) {
-			console.log("complete");
-		});
-	
-	
-	
-		function seriesChart(divname, series_id) {
-	
-		console.log("stockChart divname="+divname)
-		$.getJSON('series/json?id=' + series_id, function(data) {
-			console.log("Binding a chart to the container '" + divname + "'");
-		$('#'+divname).highcharts('StockChart', {
-
-
-					rangeSelector : {
-						selected : 1
-					},
-
-					title : {
-						text : ' Graph'
-					},
-
-					series : [{
-						name : 'my series',
-						data : data,
-						tooltip: {
-							valueDecimals: 2
-						}
-					}]
-
-
-		})
-
-		}).done(function(d) {
-			console.log("success, done");
-		}).fail(function(d) {
-			console.error("fail");
-		}).always(function(d) {
-			console.log("complete");
-		});
-		
-	}
-	seriesChart('container2', 5)
-//	seriesChart('container', 5)
-	
-	
-		</script>
 	<!--	
 			<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
 			<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
@@ -284,8 +149,150 @@ $.get(url)
 		
 		<!--<g:javascript src="Highstock-1/js/highstock.js" />-->
 		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
 		<script src="http://code.highcharts.com/stock/highstock.js"  onload="console.log(123);"></script>
 		<script src="http://code.highcharts.com/stock/modules/exporting.js"  onload="console.log(456)"></script>
+		
+				
+		<script type="text/javascript">
+		    if (!window.navigator.onLine) {
+				alert("It appears that your computer is offline. Things probably won't work...");
+			}
+
+			if (window.jQuery==undefined) {
+				console.warn("Cannot load jQuery. Loading from a secondary source...")
+				newscript = document.createElement("script");
+				newscript.type = "text/javascript";
+				// <g:javascript library="jquery" /> is nicer... but the templating in Grails moves it elsewhere :(
+				newscript.src = "/plotdata/static/plugins/jquery-1.8.3/js/jquery/jquery-1.8.3.min.js"; 
+				//newscript.src= "/Users/macowner/.grails/2.2.3/projects/plotdata/plugins/jquery-1.8.3/web-app/js/jquery/jquery-1.8.3.min.js"; 
+				newscript.onload = function() { console.log("Loaded jQuery from a secondary source"); dojQuery(); }
+				document.head.appendChild(newscript);
+			} else {
+				console.log("Loaded jQuery from the primary source");
+				dojQuery();
+			}
+
+		// All jQuery code is here
+		function dojQuery() {
+		// First load jQuery
+		// Then load highstock.js
+		// Then load exporting.js
+		// Exactly in this order
+	
+			if (window.jQuery==undefined) { console.error("Loaded but failed to initialize jQuery. Weird but it happens..."); }
+			$( function() { 
+				console.log("jQuery works. Checking Highcharts...");
+			if ($().highcharts == undefined) { // still need to load Highcharts
+				console.log("Loading Highcharts from a secondary source...");
+				newscript = document.createElement("script");
+				newscript.type = "text/javascript";
+				newscript.src = "/plotdata/static/js/HighStock-1/js/highstock.js"; 
+				newscript.onload = function() { 
+					console.log("Loaded highstock.js"); 
+					var newscript = document.createElement("script"); // Scoping with 'var' just to be safe
+					newscript.type = "text/javascript";
+					newscript.src = "/plotdata/static/js/HighStock-1/js/modules/exporting.js"; 
+					newscript.onload = function() { console.log("Loaded exporting.js"); doCharts(); }
+					document.head.appendChild(newscript);
+				};	
+				document.head.appendChild(newscript);
+			} else {
+				doCharts();
+			}
+		});
+	};
+
+		function doCharts() {
+			console.log("doCharts");
+			
+
+
+			
+
+				$.getJSON('series/json', function(data) {
+				var s='<table>'
+				for (var i=0; i<data.length; i++) {
+					s += '<tr onclick="showSeries('+data[i].id+')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
+				}
+				s+='</table>';
+			    /*var tbl = document.createElement("table");
+				tbl.setAttribute("border", "2");
+				var tbody = document.createElement("tbody");
+				tbl.appendChild(tbody);
+				var row = document.createElement("tr");
+				tbody.appendChild(row);
+				var cell = document.createElement("td");
+				row.appentChild(cell);
+				cell.appendChild(document.createTextNode("hello, world!"));*/
+			/*	document.getElementById("series-list").apendChild("test");
+				alert(""+document.getElementById("container"));*/
+
+				$('#series-list').html(s)
+					//document.write("HELLO<b1>HI</b1>")
+					//document.writeln("got data "+data)
+				}).done(function(d) {
+						console.log("success, done");
+					}).fail(function(d) {
+						console.error("fail");
+					}).always(function(d) {
+						console.log("complete");
+					});
+
+
+
+				seriesChart('container2', 5);
+			//	seriesChart('container', 5)
+
+
+			
+		}
+
+		function showSeries(i) {
+			seriesChart('container', i)
+		}
+
+		function seriesChart(divname, series_id) {
+
+			console.log("stockChart divname="+divname)
+			$.getJSON('series/json?id=' + series_id, function(data) {
+				console.log("Binding a chart to the container '" + divname + "'");
+				$('#'+divname).highcharts('StockChart', {
+
+
+						rangeSelector : {
+							selected : 1
+						},
+
+						title : {
+							text : ' Graph'
+						},
+
+						series : [{
+							name : 'my series',
+							data : data,
+							tooltip: {
+								valueDecimals: 2
+							}
+						}]
+
+
+				})
+
+			}).done(function(d) {
+				console.log("success, done");
+			}).fail(function(d) {
+				console.error("fail");
+			}).always(function(d) {
+				console.log("complete");
+			});
+
+		}
+
+
+
+		</script>
+		
 		
 	</body>
 </html>

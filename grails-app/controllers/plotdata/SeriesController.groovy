@@ -18,10 +18,10 @@ class SeriesController {
 		
 		render (contentType: "application/json") {
 			if (id) {
-				sql.rows("SELECT * from `points` where series_id=? and time>?", [id, strictlyafter])
+				sql.rows("SELECT * from `points` where series_id=? and time>?", [id, strictlyafter]).collect{ [it.time, it.value] }
 			} else if ((name) && (type)) {
 				sql.rows("SELECT * from `points` where series_id=(SELECT id from series where type=? and name=?) and time>?", 
-					[type, name, strictlyafter])
+					[type, name, strictlyafter]).collect{ [it.time, it.value] }
 			} else {
 				sql.rows("SELECT * from `series`")
 			}

@@ -13,7 +13,6 @@
   *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-package com.sergeyorshanskiy.util;
 import java.io.*
 import java.net.*
 import java.util.ArrayList
@@ -66,17 +65,38 @@ import java.util.ArrayList
         return resultDict
     }
 
+	public static getAverage(ArrayList stocks) {
+		def ba_map = this.getBidAsk(stocks);
+		
+		// Make another map where values are numbers (averages), not lists of two entries [bid, ask]
+		// Averages the entries. If either is null, picks the other; if both are null, keeps null.
+		def av_map=[ba_map*.key, ba_map*.value.collect{ it[0] ? (it[1] ?  (it[0] + it[1]) / 2 : it[0]) : it[1]}].transpose().collectEntries{it}
+		
+		// Remove elements with null values.
+		return av_map.collectEntries{it.value ? it : [:]}
+	}
+
      // TODO: make a JUnit test instead? 
      // Note that the result of the test depends on whether you can connect to Yahoo Finance, so not exactly a "unit test" as it is
     public static void main(String [] args) {
         println "Testing itself..."   
-        def map = getBidAsk(["AAPL", "MSFT", "GOOG"])
+		def stocks = ["AAPL", "MSFT", "NOTHING", "GOOG", "T", "MTR", "AA", "ADBE", "MCD"]
+        def map = getBidAsk(stocks)
         if (map) {
        	    map.each{ k, v -> println "${k}: bid=${v[0]}, ask=${v[1]}, aver=${(v[0] && v[1]) ? (v[0]+v[1])/2 : null}" }
         } else {
             println "Cannot retrieve data from Yahoo finance"
 	        System.exit(1)
         }
+
+		map = getAverage(stocks)
+		if (map) {
+	    	map.each{ k, v -> println "$k : $v" }
+	     } else {
+	     	println "Cannot retrieve data from Yahoo finance"
+		 	System.exit(1)
+	     }
+		
     }
 }
 

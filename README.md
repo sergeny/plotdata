@@ -50,4 +50,11 @@ You can also specify a different file:
 ./backend.sh -c /etc/BackendConfig.groovy --run
 DO NOT RUN MULTIPLE BACKEND SERVERS AT THE SAME TIME. 
 
-10. Stop the server with Ctrl+C (so far there is no other option)
+10. Start the frontend with
+```
+grailsw run-app
+```
+
+11. Navigate to http://localhost:8080/plotdata/
+
+

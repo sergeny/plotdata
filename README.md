@@ -7,7 +7,7 @@ Make sure you have PATH configure so you can just type 'groovy' from the command
 
 4. For everything that follows, use the grails wrapper "grailsw", if you are on unix, or "grailsw.bat", if you are on Windows.
 
-5. Install a database such as MySQL with InnoDB, or anything else supported by Grails. You cannot use a default in-memory database as the backend won't be able to write to it. (You may be able to use the default H2 database configured to save data to a file on the hard drive. This wasn't tested yet, though.)
+5. Install a database such as MySQL with InnoDB, or anything else supported by Grails. You cannot use a default in-memory database as the backend won't be able to write to it. (You may be able to use the default H2 database configured to save data to a file on the hard drive. This wasn't tested yet, though.) Actually run the database server. Create users for it and make sure that everything works.
 
 6. Configure connection to a database by manually editing grails-app/conf/DataSource.groovy.
 Note that you can have different settings for "development", "test", and "production". 
@@ -35,6 +35,8 @@ Then it will create a configuration script for the backend. By default this file
 and if you run it as a groovy script, it will also test the connection.
 You can also specify an alternative name for this file, e.g.
 grailsw configure-backend /etc/BackendConfig.groovy
+
+After that you can freely change the username/password in DataSource.groovy if you want the backend and the frontend to use different usernames for connecting to the database. (Perhaps so the frontend would have read-only rights.)
 
 9. Use the script backend.sh to create tables in the SQL database:
 ```shell

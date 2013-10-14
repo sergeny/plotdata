@@ -85,12 +85,9 @@
 
 
 
-<!--			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
-			<script type="text/javascript"  src="http://code.highcharts.com/stock/highstock.js" ></script>-->
-			<!-- we may be offline.. backup -->
-			<g:javascript library="jquery"/>
-			<g:javascript src="Highstock-1/js/highstock.js" />
-				<g:javascript src="Highstock-1/js/modules/exporting.js" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
+
+				 <!--"Highstock-1/js/modules/exporting.js"-->
 <!--			<script type="text/javascript" src="/Users/macowner/.grails//2.2.3/projects/plotdata/plugins/jquery-1.8.3/web-app/js/jquery/jquery-1.8.3.min.js" />-->
 			<script type="text/javascript" >
 
@@ -115,7 +112,36 @@
 	<body>
 
 <script type="text/javascript">
-alert("test")
+
+
+function loadScript(url, onsuccess, onerror) {
+$.get(url)
+    .done(function() {
+        // File/url exists
+        console.log("JS Loader: file exists, executing $.getScript "+url)
+        $.getScript(url, function() {
+            if (onsuccess) {
+                console.log("JS Loader: Ok, loaded. Calling onsuccess() for " + url);
+                onsuccess();
+                console.log("JS Loader: done with onsuccess() for " + url);
+            } else {
+                console.log("JS Loader: Ok, loaded, no onsuccess() callback " + url)
+            }
+        });
+    }).fail(function() {
+            // File/url does not exist
+            if (onerror) {
+                console.error("JS Loader: probably 404 not found. Not calling $.getScript. Calling onerror() for " + url);
+                onerror();
+                console.error("JS Loader: done with onerror() for " + url);
+            } else {
+                console.error("JS Loader: probably 404 not found. Not calling $.getScript. No onerror() callback " + url);
+            }
+    });
+}
+
+//loadScript("http://localhost:8080/plotdata/static/js/Highstock-1/js/highstock.js");
+alert("test");
 	if (window.jQuery) {
 	        console.log("jQuery is now loaded"); // What if loaded multiple times?
 	} else {
@@ -149,8 +175,9 @@ alert("test")
 		function seriesChart(divname) {
 	
 		alert("stockChart divname="+divname)
-		$.getJSON('stock/json/ADBE', function(data) {
+		$.getJSON('series/json?id=7', function(data) {
 			alert("got data"+data);
+			console.log("Binding a chart to the container '" + divname + "'");
 		$('#'+divname).highcharts('StockChart', {
 
 
@@ -232,5 +259,11 @@ alert("test")
 	<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
 		
 		</div>
+		
+		<!--<g:javascript src="Highstock-1/js/highstock.js" />-->
+		
+		<script src="http://code.highcharts.com/stock/highstock.js"  onload="console.log(123);"></script>
+		<script src="http://code.highcharts.com/stock/modules/exporting.js"  onload="console.log(456)"></script>
+		
 	</body>
 </html>

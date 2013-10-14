@@ -141,7 +141,6 @@ $.get(url)
 }
 
 //loadScript("http://localhost:8080/plotdata/static/js/Highstock-1/js/highstock.js");
-alert("test");
 	if (window.jQuery) {
 	        console.log("jQuery is now loaded"); // What if loaded multiple times?
 	} else {
@@ -150,7 +149,7 @@ alert("test");
 	}
 	
 	function showSeries(i) {
-		alert("show series:"+i)
+		seriesChart('container', i)
 	}
 	
 	$.getJSON('series/json', function(data) {
@@ -163,20 +162,19 @@ alert("test");
 		//document.write("HELLO<b1>HI</b1>")
 		//document.writeln("got data "+data)
 	}).done(function(d) {
-			alert("success, done");
+			console.log("success, done");
 		}).fail(function(d) {
-			alert("fail");
+			console.error("fail");
 		}).always(function(d) {
-			alert("complete");
+			console.log("complete");
 		});
 	
 	
 	
-		function seriesChart(divname) {
+		function seriesChart(divname, series_id) {
 	
-		alert("stockChart divname="+divname)
-		$.getJSON('series/json?id=7', function(data) {
-			alert("got data"+data);
+		console.log("stockChart divname="+divname)
+		$.getJSON('series/json?id=' + series_id, function(data) {
 			console.log("Binding a chart to the container '" + divname + "'");
 		$('#'+divname).highcharts('StockChart', {
 
@@ -186,7 +184,7 @@ alert("test");
 					},
 
 					title : {
-						text : ' Stock Price'
+						text : ' Graph'
 					},
 
 					series : [{
@@ -201,15 +199,16 @@ alert("test");
 		})
 
 		}).done(function(d) {
-			alert("success, done");
+			console.log("success, done");
 		}).fail(function(d) {
-			alert("fail");
+			console.error("fail");
 		}).always(function(d) {
-			alert("complete");
+			console.log("complete");
 		});
-		alert("ok");
+		
 	}
-	seriesChart('container')
+	seriesChart('container', 7)
+//	seriesChart('container', 5)
 	
 	
 		</script>
@@ -256,7 +255,7 @@ alert("test");
 			
 			<div id="series-list" role="navigation">
 			</div>
-	<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
+	<div id="container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
 		
 		</div>
 		

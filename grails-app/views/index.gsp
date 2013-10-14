@@ -139,7 +139,7 @@
 			</div>
 			-->
 				<div id="series-list" role="navigation">
-						Error: Cannot display series-list
+					 Loading series-list...
 				</div>
 			
 			
@@ -205,7 +205,11 @@
 
 		function doCharts() {
 			console.log("doCharts");
-			
+				Highcharts.setOptions({
+					global: {
+						useUTC: false
+					}
+				})
 
 
 			
@@ -213,7 +217,7 @@
 				$.getJSON('series/json', function(data) {
 				var s='<table>'
 				for (var i=0; i<data.length; i++) {
-					s += '<tr onclick="showSeries('+data[i].id+')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
+					s += '<tr onclick="showSeries(\''+data[i].type+'\', \'' + data[i].name + '\')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
 				}
 				s+='</table>';
 			    /*var tbl = document.createElement("table");
@@ -241,35 +245,53 @@
 
 
 
-				seriesChart('container2', 5);
+				seriesChart('container2', 'local', 'freemem');
 			//	seriesChart('container', 5)
 
 
 			
 		}
 
-		function showSeries(i) {
-			seriesChart('container', i)
+		function showSeries(series_type, series_name /* i */) {
+			seriesChart('container', series_type, series_name /* i */)
 		}
+		
+	
 
-		function seriesChart(divname, series_id) {
+		function seriesChart(divname, series_type, series_name /* series_id */) {
 
 			console.log("stockChart divname="+divname)
-			$.getJSON('series/json?id=' + series_id, function(data) {
+			var get_json_url = 'series/json?type=' + series_type + '&name=' + series_name; 
+			$.getJSON(get_json_url, function(data) {
 				console.log("Binding a chart to the container '" + divname + "'");
 				$('#'+divname).highcharts('StockChart', {
-
-
+					
+						chart : {
+							events: {
+								load: function () {
+									// set up the updating of the chart each second
+									var series = this.series[0];
+									setInterval(function() {
+										$.getJSON(get_json_url, function(data) {
+												series = series.concat(data);
+															var x = (new Date()).getTime(), // current time
+															y = Math.round(Math.random() * 100);
+															series.addPoint([x, y], true, true);
+										});
+									}, 1000); // every second
+								}
+							}
+						},
 						rangeSelector : {
 							selected : 1
 						},
 
 						title : {
-							text : ' Graph'
+							text : ' Graph of ' + series_type + ':' + series_name
 						},
 
 						series : [{
-							name : 'my series',
+							name : series_type + ':' + series_name,
 							data : data,
 							tooltip: {
 								valueDecimals: 2

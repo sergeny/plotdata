@@ -18,6 +18,14 @@
 				-webkit-border-radius: 0.6em;
 				border-radius: 0.6em;
 			}
+			
+			#series-list {
+				float: none
+			}
+			
+			#container {
+				float: right;
+			}
 
 			.ie6 #status {
 				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
@@ -157,7 +165,19 @@ $.get(url)
 	for (var i=0; i<data.length; i++) {
 		s += '<tr onclick="showSeries('+data[i].id+')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
 	}
-	s+='</table>'
+	s+='</table>';
+    /*var tbl = document.createElement("table");
+	tbl.setAttribute("border", "2");
+	var tbody = document.createElement("tbody");
+	tbl.appendChild(tbody);
+	var row = document.createElement("tr");
+	tbody.appendChild(row);
+	var cell = document.createElement("td");
+	row.appentChild(cell);
+	cell.appendChild(document.createTextNode("hello, world!"));*/
+/*	document.getElementById("series-list").apendChild("test");
+	alert(""+document.getElementById("container"));*/
+	
 	$('#series-list').html(s)
 		//document.write("HELLO<b1>HI</b1>")
 		//document.writeln("got data "+data)
@@ -207,7 +227,7 @@ $.get(url)
 		});
 		
 	}
-	seriesChart('container', 7)
+	seriesChart('container2', 5)
 //	seriesChart('container', 5)
 	
 	
@@ -217,7 +237,7 @@ $.get(url)
 			<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
 		-->
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div id="status" role="complementary">
+		<!--<<div id="status" role="complementary">
 			<h1>Application Status</h1>
 			<ul>
 				<li>App version: <g:meta name="app.version"/></li>
@@ -237,24 +257,27 @@ $.get(url)
 				</g:each>
 			</ul>
 		</div>
+-->
 		<div id="page-body" role="main">
-			<h1>Welcome to Grails2</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
+			<h1>Graphing data</h1>
+			<p>Pick the data you would like to graph</p>
 
-			<div id="controller-list" role="navigation">
+			<!--<div id="controller-list" role="navigation">
+			
 				<h2>Available Controllers:</h2>
 				<ul>
 					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
 						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
 					</g:each>
 				</ul>
-			</div>
 			
-			<div id="series-list" role="navigation">
 			</div>
+			-->
+				<div id="series-list" role="navigation">
+						Error: Cannot display series-list
+				</div>
+			
+			
 	<div id="container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
 		
 		</div>

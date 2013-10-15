@@ -5,7 +5,7 @@
 		<title>Plotdata real-time charts application</title>
 		<script type="text/javascript">
 			// GLOBAL VARIABLES
-			
+			window.refreshIntervalId = undefined; // Id of the function currently doing live updates of the chart. Used by setInterval and clearInterval.			
 			window.chartRefreshPeriodMs = 1000;   // Refresh the charts every that many milliseconds
 		</script>
 		
@@ -178,14 +178,20 @@
 						chart : {
 							events: {
 								load: function () {
-									// set up the updating of the chart every once in a while
+									// set up the updating of the chart so it is live
 									
 									var series = this.series[0];
 									// Store the last timestamp to request incremental updates
 									var last_ts = max_timestamp(data);
 									console.log("last timestamp: " + last_ts);
-									
-									setInterval( function() {
+										// Very important. If we already have a scheduled function regularly updating a live chart, we have to 
+										// cancel it before creating another one. Otherwise we can have 10 functions running on the timer
+										// even if the charts are not actually displayed.
+										if (window.refreshIntervalId != undefined) {
+											clearInterval(window.refreshIntervalId);
+											window.refreshIntervalId = undefined;
+										}
+										window.refreshIntervalId = setInterval( function() {
 										console.log("Iteration last_ts="+last_ts);
 										var x = 1, y = 2;
 											var x = (new Date()).getTime(), // current time

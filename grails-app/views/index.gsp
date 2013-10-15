@@ -256,6 +256,18 @@
 			seriesChart('container', series_type, series_name /* i */)
 		}
 		
+		
+		
+		function max_timestamp(data) {
+			var m = 0;
+			for (var i = 0; i < data.length; i++) {
+				if (m < data[i][0]) {
+					m = data[i][0];
+				}
+			}
+			return m;
+		}
+	
 	
 
 		function seriesChart(divname, series_type, series_name /* series_id */) {
@@ -265,22 +277,54 @@
 			$.getJSON(get_json_url, function(data) {
 				console.log("Binding a chart to the container '" + divname + "'");
 				$('#'+divname).highcharts('StockChart', {
-					
 						chart : {
 							events: {
 								load: function () {
-									// set up the updating of the chart each second
+									// set up the updating of the chart every once in a while
+									
 									var series = this.series[0];
-									setInterval(function() {
-										$.getJSON(get_json_url, function(data) {
-												series = series.concat(data);
-															var x = (new Date()).getTime(), // current time
-															y = Math.round(Math.random() * 100);
-															series.addPoint([x, y], true, true);
-										});
-									}, 1000); // every second
+									// Store the last timestamp to request incremental updates
+									var last_ts = max_timestamp(data);
+									console.log("last timestamp: " + last_ts);
+									
+									setInterval( function() {
+										console.log("Iteration last_ts="+last_ts);
+										var x = 1, y = 2;
+											var x = (new Date()).getTime(), // current time
+											y = 2;
+									
+										$.getJSON(get_json_url + '&strictlyafter=' + last_ts, function(new_data) { // request any new data 
+											if (new_data.length == 0) {
+												return;
+											}
+											console.log("Received new data: " + new_data);
+										
+											
+											for (var i = 0; i < new_data.length; i++) {
+												series.addPoint(new_data[i], true, true); // note the last "true"
+												//console.log("ts: " + max_timestamp(data));
+												//console.log("adding point "+data[i]);
+											//	series.addPoint([data[i][0], data[i][1]], true, true);
+											}
+											last_ts = max_timestamp(new_data); // it is supposed to increase
+											
+										}); // $.getJSON
+									}, 5000); // each 5 seconds
+									
+								/*	setInterval( (function(x) { return function() { // Bind x into the function
+											x=x+1;
+										console.debug("get json " + get_json_url + '&strictlyafter=' + x);
+										$.getJSON(get_json_url + '&strictlyafter=' + x, (function(x) { return function(data) { // Again bind x into the function
+												console.log("got json" + x);
+												series.addPoint([1,2], true, true);
+												//series = series.concat(data);
+												//var x = (new Date()).getTime(), // current time
+												//y = Math.round(Math.random() * 100);
+												//series.addPoint([x, y], true, true);
+										}; })(x)); // $.getJSON
+									}; })(x), 1000); // exery second	*/							
 								}
-							}
+								}
 						},
 						rangeSelector : {
 							selected : 1

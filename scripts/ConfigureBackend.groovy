@@ -133,7 +133,8 @@ def dataToUpdate() {
             ["always five": {return 5},
              "timestamp":   {new Date().getTime()},
              "freemem":     {Runtime.getRuntime().freeMemory()},
-             "random":      {new Random().nextInt(10)} ],
+             "random":      {new Random().nextInt(10)},
+			 "Math sine function":         {java.lang.Math.sin(new Date().getTime() / 10000)} ],
         "stock":
             null
     ]

@@ -17,6 +17,23 @@
 			*/
 			#all_series_menu {
 				float: none;
+				width: auto;
+				overflow: hidden;
+				
+		        background-color: #eee;
+		        border: .2em solid #fff;
+		        margin: 1em 1em 0.5em;
+		        padding: 0.2em;
+		                           
+		                                -moz-box-shadow: 0px 0px 1.25em #ccc;
+		                                -webkit-box-shadow: 0px 0px 1.25em #ccc;
+		                                box-shadow: 0px 0px 1.25em #ccc;
+		                                -moz-border-radius: 0.6em;
+		                                -webkit-border-radius: 0.6em;
+		                                border-radius: 0.6em;
+									
+		                        
+		     
 			} 
 			
 			
@@ -28,9 +45,13 @@
 				background: #afefaf;
 			}
 	
-			#chart_container {
-				float: none;
+			#chart-wrapper {
+				float: right;
+				position: relative;
+				width:75%;
 			}
+	
+		
 		
 
 
@@ -73,11 +94,15 @@
 			<h1>Graphing data</h1>
 			<p>Pick the data you would like to graph</p>
 
+			<div id="chart-wrapper">
+			<div id="chart-container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
+			</div>
+
 			<div id="all_series_menu" role="navigation">
 				<g:render template="/series/all_series_menu" model="[on_click_callback:'showSeries']" />
 			</div>
 				
-			<div id="chart_container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
+		
 		
 		</div>
 		
@@ -147,11 +172,11 @@
 						useUTC: false   /* So the timestamps will be properly interpreted when you hover over a graph */
 					}
 				})
-				seriesChart('chart_container', 'local', 'freemem');		
+				seriesChart('chart-container', 'local', 'freemem');		
 		}
 
 		function showSeries(series_type, series_name /* i */) {
-			seriesChart('chart_container', series_type, series_name /* i */)
+			seriesChart('chart-container', series_type, series_name /* i */)
 		}
 		
 		

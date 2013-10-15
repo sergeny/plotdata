@@ -3,6 +3,10 @@
 	<head>
 		<meta name="layout" content="main"/>
 		<title>Welcome to Grails</title>
+		<script type="text/javascript">
+			window.chartRefreshPeriodMs = 1000;   // Refresh the charts every that many milliseconds
+		</script>
+		
 		<style type="text/css" media="screen">
 			#status {
 				background-color: #eee;
@@ -87,7 +91,6 @@
 				}
 			}
 		</style>
-		
 	
 	</head>
 	
@@ -97,32 +100,9 @@
 	<body>
 
 
-	<!--	
-			<div id="container" style="position:relative; width:100%; height:400px; left:273px; top:37px; " ></div>
-			<div id="container2" style="position:relative; height:283px; width:1012px; " ></div>
-		-->
+
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<!--<<div id="status" role="complementary">
-			<h1>Application Status</h1>
-			<ul>
-				<li>App version: <g:meta name="app.version"/></li>
-				<li>Grails version: <g:meta name="app.grails.version"/></li>
-				<li>Groovy version: ${GroovySystem.getVersion()}</li>
-				<li>JVM version: ${System.getProperty('java.version')}</li>
-				<li>Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</li>
-				<li>Controllers: ${grailsApplication.controllerClasses.size()}</li>
-				<li>Domains: ${grailsApplication.domainClasses.size()}</li>
-				<li>Services: ${grailsApplication.serviceClasses.size()}</li>
-				<li>Tag Libraries: ${grailsApplication.tagLibClasses.size()}</li>
-			</ul>
-			<h1>Installed Plugins</h1>
-			<ul>
-				<g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-					<li>${plugin.name} - ${plugin.version}</li>
-				</g:each>
-			</ul>
-		</div>
--->
+
 		<div id="page-body" role="main">
 			<h1>Graphing data</h1>
 			<p>Pick the data you would like to graph</p>
@@ -138,9 +118,11 @@
 			
 			</div>
 			-->
-				<div id="series-list" role="navigation">
-					 Loading series-list...
+				<div id="all_series_menu" role="navigation">
+					<g:render template="/series/all_series_menu" model="[on_click_callback:'showSeries']" />
 				</div>
+			
+				
 			
 			
 	<div id="container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
@@ -210,46 +192,7 @@
 						useUTC: false
 					}
 				})
-
-
-			
-
-				$.getJSON('series/json', function(data) {
-				var s='<table>'
-				for (var i=0; i<data.length; i++) {
-					s += '<tr onclick="showSeries(\''+data[i].type+'\', \'' + data[i].name + '\')"><td>'+data[i].type+'</td><td>'+data[i].name+'</td></tr>'
-				}
-				s+='</table>';
-			    /*var tbl = document.createElement("table");
-				tbl.setAttribute("border", "2");
-				var tbody = document.createElement("tbody");
-				tbl.appendChild(tbody);
-				var row = document.createElement("tr");
-				tbody.appendChild(row);
-				var cell = document.createElement("td");
-				row.appentChild(cell);
-				cell.appendChild(document.createTextNode("hello, world!"));*/
-			/*	document.getElementById("series-list").apendChild("test");
-				alert(""+document.getElementById("container"));*/
-
-				$('#series-list').html(s)
-					//document.write("HELLO<b1>HI</b1>")
-					//document.writeln("got data "+data)
-				}).done(function(d) {
-						console.log("success, done");
-					}).fail(function(d) {
-						console.error("fail");
-					}).always(function(d) {
-						console.log("complete");
-					});
-
-
-
-				seriesChart('container2', 'local', 'freemem');
-			//	seriesChart('container', 5)
-
-
-			
+				seriesChart('container', 'local', 'freemem');		
 		}
 
 		function showSeries(series_type, series_name /* i */) {
@@ -297,7 +240,7 @@
 											if (new_data.length == 0) {
 												return;
 											}
-											console.log("Received new data: " + new_data);
+											console.log("Request " + get_json_url + '&strictlyafter=' + last_ts+ "Received new data: " + new_data);
 										
 											
 											for (var i = 0; i < new_data.length; i++) {
@@ -306,23 +249,17 @@
 												//console.log("adding point "+data[i]);
 											//	series.addPoint([data[i][0], data[i][1]], true, true);
 											}
-											last_ts = max_timestamp(new_data); // it is supposed to increase
+											var new_last_ts = max_timestamp(new_data); // it is supposed to increase
+											if (new_last_ts > last_ts) {
+												console.log("last_ts was " + last_ts + " and is now " + new_last_ts);
+											} else {
+												console.error("last_ts must increase! last_ts was " + last_ts + " and is now " + new_last_ts);	
+											}
+											last_ts = new_last_ts;
 											
 										}); // $.getJSON
-									}, 5000); // each 5 seconds
-									
-								/*	setInterval( (function(x) { return function() { // Bind x into the function
-											x=x+1;
-										console.debug("get json " + get_json_url + '&strictlyafter=' + x);
-										$.getJSON(get_json_url + '&strictlyafter=' + x, (function(x) { return function(data) { // Again bind x into the function
-												console.log("got json" + x);
-												series.addPoint([1,2], true, true);
-												//series = series.concat(data);
-												//var x = (new Date()).getTime(), // current time
-												//y = Math.round(Math.random() * 100);
-												//series.addPoint([x, y], true, true);
-										}; })(x)); // $.getJSON
-									}; })(x), 1000); // exery second	*/							
+									}, window.chartRefreshPeriodMs); // each 5 seconds
+															
 								}
 								}
 						},

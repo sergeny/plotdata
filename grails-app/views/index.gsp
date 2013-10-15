@@ -2,58 +2,40 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>Welcome to Grails</title>
+		<title>Plotdata real-time charts application</title>
 		<script type="text/javascript">
+			// GLOBAL VARIABLES
+			
 			window.chartRefreshPeriodMs = 1000;   // Refresh the charts every that many milliseconds
 		</script>
 		
 		<style type="text/css" media="screen">
-			#status {
-				background-color: #eee;
-				border: .2em solid #fff;
-				margin: 2em 2em 1em;
-				padding: 1em;
-				width: 12em;
-				float: left;
-				-moz-box-shadow: 0px 0px 1.25em #ccc;
-				-webkit-box-shadow: 0px 0px 1.25em #ccc;
-				box-shadow: 0px 0px 1.25em #ccc;
-				-moz-border-radius: 0.6em;
-				-webkit-border-radius: 0.6em;
-				border-radius: 0.6em;
-			}
+			/* GLOBAL STYLE SETTINGS
 			
-			#series-list {
-				float: none
-			}
+			 Position the main elements on the screen
+			 The chart and the menu to pick, which chart to display
+			*/
+			#all_series_menu {
+				float: none;
+			} 
 			
-			#container {
-				float: right;
+			
+			/* Alternating lines in the main menu */
+			#all_series_menu tr.odd {
+				background: #87d787;
 			}
+			#all_series_menu tr.even {
+				background: #afefaf;
+			}
+	
+			#chart_container {
+				float: none;
+			}
+		
 
-			.ie6 #status {
-				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
-			}
-
-			#status ul {
-				font-size: 0.9em;
-				list-style-type: none;
-				margin-bottom: 0.6em;
-				padding: 0;
-			}
-
-			#status li {
-				line-height: 1.3;
-			}
-
-			#status h1 {
-				text-transform: uppercase;
-				font-size: 1.1em;
-				margin: 0 0 0.3em;
-			}
 
 			#page-body {
-				margin: 2em 1em 1.25em 18em;
+				margin: 2em 1em 1.25em 4em;
 			}
 
 			h2 {
@@ -67,20 +49,10 @@
 				margin: 0.25em 0;
 			}
 
-			#controller-list ul {
-				list-style-position: inside;
-			}
-
-			#controller-list li {
-				line-height: 1.3;
-				list-style-position: inside;
-				margin: 0.25em 0;
-			}
+	
 
 			@media screen and (max-width: 480px) {
-				#status {
-					display: none;
-				}
+		
 
 				#page-body {
 					margin: 0 1em 1em;
@@ -91,51 +63,34 @@
 				}
 			}
 		</style>
-	
 	</head>
 	
 	     
 	
 	
-	<body>
-
-
-
-		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-
+	<body>	
 		<div id="page-body" role="main">
 			<h1>Graphing data</h1>
 			<p>Pick the data you would like to graph</p>
 
-			<!--<div id="controller-list" role="navigation">
-			
-				<h2>Available Controllers:</h2>
-				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
-				</ul>
-			
+			<div id="all_series_menu" role="navigation">
+				<g:render template="/series/all_series_menu" model="[on_click_callback:'showSeries']" />
 			</div>
-			-->
-				<div id="all_series_menu" role="navigation">
-					<g:render template="/series/all_series_menu" model="[on_click_callback:'showSeries']" />
-				</div>
-			
 				
-			
-			
-	<div id="container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
+			<div id="chart_container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
 		
 		</div>
 		
-		<!--<g:javascript src="Highstock-1/js/highstock.js" />-->
+	
 		
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
 		<script src="http://code.highcharts.com/stock/highstock.js"  onload="console.log(123);"></script>
 		<script src="http://code.highcharts.com/stock/modules/exporting.js"  onload="console.log(456)"></script>
 		
-				
+	
+	
+	<!-- TRYING TO LOAD jQUERY and other libraries if offline... Not very successfully so far... 
+	Not sure if this is because of Highcharts or because of how Grails treats different types of files in web-app (assigning them different urls)-->			
 		<script type="text/javascript">
 		    if (!window.navigator.onLine) {
 				alert("It appears that your computer is offline. Things probably won't work...");
@@ -189,18 +144,18 @@
 			console.log("doCharts");
 				Highcharts.setOptions({
 					global: {
-						useUTC: false
+						useUTC: false   /* So the timestamps will be properly interpreted when you hover over a graph */
 					}
 				})
-				seriesChart('container', 'local', 'freemem');		
+				seriesChart('chart_container', 'local', 'freemem');		
 		}
 
 		function showSeries(series_type, series_name /* i */) {
-			seriesChart('container', series_type, series_name /* i */)
+			seriesChart('chart_container', series_type, series_name /* i */)
 		}
 		
 		
-		
+		// data is an array of the form [[timestamp_1, value_1], [timestamp_2, value_2], ... ]
 		function max_timestamp(data) {
 			var m = 0;
 			for (var i = 0; i < data.length; i++) {

@@ -21,7 +21,7 @@
 				overflow: hidden;
 				
 		        background-color: #eee;
-		        border: .2em solid #fff;
+		        border: .2em solid #5c5;
 		        margin: 1em 1em 0.5em;
 		        padding: 0.2em;
 		                           
@@ -39,10 +39,18 @@
 			
 			/* Alternating lines in the main menu */
 			#all_series_menu tr.odd {
-				background: #87d787;
+				background: #97d797;
 			}
 			#all_series_menu tr.even {
 				background: #afefaf;
+			}
+			
+			#all_series_menu tr {
+				cursor: pointer;
+			}
+			
+			#all_series_menu tr:hover {
+				background: #55aa55;
 			}
 	
 			#chart-wrapper {
@@ -57,6 +65,11 @@
 
 			#page-body {
 				margin: 2em 1em 1.25em 4em;
+			}
+			
+			#header {
+				float: none;
+				text-align: center;
 			}
 
 			h2 {
@@ -91,8 +104,10 @@
 	
 	<body>	
 		<div id="page-body" role="main">
-			<h1>Graphing data</h1>
-			<p>Pick the data you would like to graph</p>
+			<div id="header">
+				<h1>Graphing data</h1>
+				<p>Pick the data you would like to graph</p>
+			</div>
 
 			<div id="chart-wrapper">
 			<div id="chart-container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>

@@ -222,7 +222,7 @@
 		function seriesChart(divname, series_type, series_name /* series_id */) {
 
 			/*console.log("stockChart divname="+divname)*/
-			var get_json_url = 'series/json?type=' + series_type + '&name=' + series_name; 
+			var get_json_url = 'series/json/' + series_type + '/' + series_name; 
 			$.getJSON(get_json_url, function(data) {
 				/*console.log("Binding a chart to the container '" + divname + "'");*/
 				$('#'+divname).highcharts('StockChart', {
@@ -248,11 +248,11 @@
 											var x = (new Date()).getTime(), // current time
 											y = 2;
 									
-										$.getJSON(get_json_url + '&strictlyafter=' + last_ts, function(new_data) { // request any new data 
+										$.getJSON(get_json_url + '?strictlyafter=' + last_ts, function(new_data) { // request any new data 
 											if (new_data.length == 0) {
 												return;
 											}
-											/*console.log("Request " + get_json_url + '&strictlyafter=' + last_ts+ "Received new data: " + new_data);*/
+											/*console.log("Request " + get_json_url + '?strictlyafter=' + last_ts+ "Received new data: " + new_data);*/
 										
 											
 											for (var i = 0; i < new_data.length; i++) {

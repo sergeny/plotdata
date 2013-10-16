@@ -135,8 +135,8 @@
 	
 		
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
-		<script src="http://code.highcharts.com/stock/highstock.js"  onload="console.log(123);"></script>
-		<script src="http://code.highcharts.com/stock/modules/exporting.js"  onload="console.log(456)"></script>
+		<script src="http://code.highcharts.com/stock/highstock.js" ></script>
+		<script src="http://code.highcharts.com/stock/modules/exporting.js" ></script>
 		
 		
 	
@@ -154,10 +154,10 @@
 				// <g:javascript library="jquery" /> is nicer... but the templating in Grails moves it elsewhere :(
 				newscript.src = "/plotdata/static/plugins/jquery-1.8.3/js/jquery/jquery-1.8.3.min.js"; 
 				//newscript.src= "/Users/macowner/.grails/2.2.3/projects/plotdata/plugins/jquery-1.8.3/web-app/js/jquery/jquery-1.8.3.min.js"; 
-				newscript.onload = function() { console.log("Loaded jQuery from a secondary source"); dojQuery(); }
+				newscript.onload = function() { /*console.log("Loaded jQuery from a secondary source");*/ dojQuery(); }
 				document.head.appendChild(newscript);
 			} else {
-				console.log("Loaded jQuery from the primary source");
+				/*console.log("Loaded jQuery from the primary source");*/
 				dojQuery();
 			}
 
@@ -170,18 +170,18 @@
 	
 			if (window.jQuery==undefined) { console.error("Loaded but failed to initialize jQuery. Weird but it happens..."); }
 			$( function() { 
-				console.log("jQuery works. Checking Highcharts...");
+				/*console.log("jQuery works. Checking Highcharts...");*/
 			if ($().highcharts == undefined) { // still need to load Highcharts
-				console.log("Loading Highcharts from a secondary source...");
+				/*console.log("Loading Highcharts from a secondary source...");*/
 				newscript = document.createElement("script");
 				newscript.type = "text/javascript";
 				newscript.src = "/plotdata/static/js/HighStock-1/js/highstock.js"; 
 				newscript.onload = function() { 
-					console.log("Loaded highstock.js"); 
+					/*console.log("Loaded highstock.js"); */
 					var newscript = document.createElement("script"); // Scoping with 'var' just to be safe
 					newscript.type = "text/javascript";
 					newscript.src = "/plotdata/static/js/HighStock-1/js/modules/exporting.js"; 
-					newscript.onload = function() { console.log("Loaded exporting.js"); doCharts(); }
+					newscript.onload = function() { /*console.log("Loaded exporting.js");*/ doCharts(); }
 					document.head.appendChild(newscript);
 				};	
 				document.head.appendChild(newscript);
@@ -192,7 +192,7 @@
 	};
 
 		function doCharts() {
-			console.log("doCharts");
+			/*console.log("doCharts");*/
 				Highcharts.setOptions({
 					global: {
 						useUTC: false   /* So the timestamps will be properly interpreted when you hover over a graph */
@@ -221,10 +221,10 @@
 
 		function seriesChart(divname, series_type, series_name /* series_id */) {
 
-			console.log("stockChart divname="+divname)
+			/*console.log("stockChart divname="+divname)*/
 			var get_json_url = 'series/json?type=' + series_type + '&name=' + series_name; 
 			$.getJSON(get_json_url, function(data) {
-				console.log("Binding a chart to the container '" + divname + "'");
+				/*console.log("Binding a chart to the container '" + divname + "'");*/
 				$('#'+divname).highcharts('StockChart', {
 						chart : {
 							events: {
@@ -234,7 +234,7 @@
 									var series = this.series[0];
 									// Store the last timestamp to request incremental updates
 									var last_ts = max_timestamp(data);
-									console.log("last timestamp: " + last_ts);
+									/*console.log("last timestamp: " + last_ts);*/
 										// Very important. If we already have a scheduled function regularly updating a live chart, we have to 
 										// cancel it before creating another one. Otherwise we can have 10 functions running on the timer
 										// even if the charts are not actually displayed.
@@ -243,7 +243,7 @@
 											window.refreshIntervalId = undefined;
 										}
 										window.refreshIntervalId = setInterval( function() {
-										console.log("Iteration last_ts="+last_ts);
+										/*console.log("Iteration last_ts="+last_ts);*/
 										var x = 1, y = 2;
 											var x = (new Date()).getTime(), // current time
 											y = 2;
@@ -252,7 +252,7 @@
 											if (new_data.length == 0) {
 												return;
 											}
-											console.log("Request " + get_json_url + '&strictlyafter=' + last_ts+ "Received new data: " + new_data);
+											/*console.log("Request " + get_json_url + '&strictlyafter=' + last_ts+ "Received new data: " + new_data);*/
 										
 											
 											for (var i = 0; i < new_data.length; i++) {
@@ -263,9 +263,10 @@
 											}
 											var new_last_ts = max_timestamp(new_data); // it is supposed to increase
 											if (new_last_ts > last_ts) {
-												console.log("last_ts was " + last_ts + " and is now " + new_last_ts);
+												/*console.log("last_ts was " + last_ts + " and is now " + new_last_ts);*/
 											} else {
-												console.error("last_ts must increase! last_ts was " + last_ts + " and is now " + new_last_ts);	
+												// ASSERTION FALSE !!!
+												/*console.error("last_ts must increase! last_ts was " + last_ts + " and is now " + new_last_ts);*/	
 											}
 											last_ts = new_last_ts;
 											
@@ -294,13 +295,14 @@
 
 				})
 
-			}).done(function(d) {
+			});
+			/*.done(function(d) {
 				console.log("success, done");
 			}).fail(function(d) {
 				console.error("fail");
 			}).always(function(d) {
 				console.log("complete");
-			});
+			});*/
 
 		}
 		</script>

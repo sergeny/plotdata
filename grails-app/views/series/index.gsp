@@ -1,1 +1,0 @@
-<g:render template="/series/all_series_menu" model="[on_click_callback:'alert']" />

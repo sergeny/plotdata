@@ -22,7 +22,8 @@ environments {
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+			driverClassName = "org.h2.Driver"
+            url = "jdbc:h2:mem:testDb;MODE=MySQL;MVCC=TRUE;LOCK_TIMEOUT=10000"
         }
     }
     production {

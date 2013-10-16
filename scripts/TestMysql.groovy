@@ -1,19 +1,38 @@
-/* Testing grails/GORM connection to mysql
- * Call this script "scripts/TestMysql.groovy"
+/*
+ *  This little program/GAnt script TestMySql.groovy is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This little program/GAnt script TestMySql.groovy is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+import groovy.sql.Sql
+
+/* 
+ * This GAnt script allows you to test Grails' (2.2.3) connection to MySQL.
+ * Call it "scripts/TestMysql.groovy" relative to the root of your project.
  * Usage: "grails test-mysql" or, to run in another environment, e.g. "grails test test-mysql"
- * (This is in case you have changed DataSource.groovy and nothing is working.)
+ * (This can be helpful after you edit DataSource.groovy and nothing is working.)
  *
  * Up to five parameters:
  * grails test test-mysql <host> <port> <database> <user> <password>
  * e.g. grails test test-mysql localhost 3306 test root rootpassword.
  * The database name can also be empty.
+ *
+ * @author	Sergey Orshanskiy
  */
-
-import groovy.sql.Sql
 
 includeTargets << grailsScript("_GrailsInit") << grailsScript("_GrailsArgParsing")
 
-target(main: "The description of the script goes here!") {
+target(main: "GAnt script for Grails to test MySQL connection") {
 
     def list=argsMap['params']
     def host=list[0] ? list[0] : 'localhost'  

@@ -1,3 +1,0 @@
-import DataSource
-
-println DataSource.environments

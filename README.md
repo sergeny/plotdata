@@ -2,8 +2,7 @@
 1. Install Groovy and MySQL (or, theoretically, another SQL RDBMS). 
 2. Install Grails or let the Grails wrapper, ```grailsw```, do it for you. You can always use ```grailsw``` instead of ```grails```.
 3. Edit ```DataSource.groovy``` and maybe ```BuildConfig.groovy``` to configure connection to MySQL.
-4. Generate backend config with e.g. ```./grailsw prod configure-backend``` or ```./grailsw dev configure-backend /~/dev_config.groovy```.
-5. Look into the generated config and understand what it does.
+4. Generate backend config with  ```./grailsw [prod|dev|test|] configure-backend [<config-file>]```.
 6. Create tables with ```./backend.sh [-c <config-file>] --create-tables```. 
 7. Run the backend, ```./backend.sh [-c <config-file>] --run```.
 8. Run the frontend, ```grailsw run-app```.

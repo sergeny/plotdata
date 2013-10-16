@@ -1,8 +1,8 @@
 class UrlMappings {
 
 	static mappings = {
-		"/stock/json/$ticker?" {
-			controller = "stock"
+		"/series/json/$type?/$name?" {
+			controller = "series"
 			action = "json"
 		}
 		"/$controller/$action?/$id?"{

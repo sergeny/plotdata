@@ -60,7 +60,9 @@ grailsw configure-backend /etc/BackendConfig.groovy
 ```
 After that you can freely change the username/password in DataSource.groovy if you want the backend and the frontend to use different usernames for connecting to the database. (Perhaps so the frontend would have read-only rights.)
 
-9. It is important to understand that this "configuration" contains arbitrary Groovy code! It also has all the information about the data that the backend will collect and the frontend will publish. Feel free to edit this file to add other sources of data. Anything that can be put in a Groovy closure can be used, any Groovy code whatsoever!
+9. It is important to understand that this "configuration" contains arbitrary Groovy code! It also has all the information about the data that the backend will collect and the frontend will publish. Feel free to edit this file to add other sources of data. Anything that can be put in a Groovy closure can be used, any Groovy code whatsoever! For instructions on editing the config, see <a href="https://github.co\
+m/Commentor/plotdata/wiki/Configuring-the-backend">Wiki: configuring the backend</a>.
+
 
 10. Use the script backend.sh to create tables in the SQL database:
 ```shell

@@ -19,21 +19,24 @@
 				float: none;
 				width: auto;
 				overflow: hidden;
+			
+				font-family: ‘Trebuchet MS’, Helvetica, sans-serif;
+			
 				
-		        background-color: #eee;
+		        background-color: #aaa; 
 		        border: .2em solid #5c5;
 		        margin: 1em 1em 0.5em;
 		        padding: 0.2em;
-		                           
-		                                -moz-box-shadow: 0px 0px 1.25em #ccc;
-		                                -webkit-box-shadow: 0px 0px 1.25em #ccc;
-		                                box-shadow: 0px 0px 1.25em #ccc;
-		                                -moz-border-radius: 0.6em;
-		                                -webkit-border-radius: 0.6em;
-		                                border-radius: 0.6em;
-									
-		                        
-		     
+		
+				/* add shadow around the menu */
+				-moz-box-shadow: 0px 0px 1.25em #ccc;
+				-webkit-box-shadow: 0px 0px 1.25em #ccc;
+				box-shadow: 0px 0px 1.25em #ccc;
+
+				/* round the corners of the border around the menu */
+				-moz-border-radius: 0.6em;
+				-webkit-border-radius: 0.6em;
+				border-radius: 0.6em;
 			} 
 			
 			
@@ -52,7 +55,7 @@
 			#all_series_menu tr:hover {
 				background: #55aa55;
 			}
-	
+			
 			#chart-wrapper {
 				float: right;
 				width:75%;
@@ -68,14 +71,20 @@
 		
 
 			#page-body {
-				margin: 1em 1em 0em 0em;
+				margin: 1em 0em 0em 0em;
+			}
+			
+			body {
+				font-size: 100%;
 			}
 			
 			#header {
 				float: none;
 				text-align: center;
+				font-family: Copperplate / Copperplate Gothic Light, sans-serif;
+				font-size: 1.25em;
 			}
-
+			
 			h2 {
 				margin-top: 1em;
 				margin-bottom: 0.3em;
@@ -111,6 +120,7 @@
 			<div id="header">
 				<h1>Graphing data</h1>
 				<p>Pick the data you would like to graph</p>
+				<hr color="green">
 			</div>
 
 			<div id="chart-wrapper">

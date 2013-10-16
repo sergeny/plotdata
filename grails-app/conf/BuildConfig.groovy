@@ -45,7 +45,9 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
+        // Not using Hibernate!
+        // runtime ":hibernate:$grailsVersion"
+
         runtime ":jquery:1.8.3"
         runtime ":resources:1.2"
 

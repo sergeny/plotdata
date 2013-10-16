@@ -8,10 +8,10 @@ The code in this repository is availabe under the <a href="http://www.gnu.org/li
 1. Install Groovy and MySQL (or, theoretically, another SQL RDBMS). 
 2. Install Grails or let the Grails wrapper, ```grailsw```, do it for you. You can always use ```grailsw``` instead of ```grails```.
 3. Edit ```DataSource.groovy``` and maybe ```BuildConfig.groovy``` to configure connection to MySQL.
-4. Generate backend config with  ```./grailsw [prod|dev|test|] configure-backend [<config-file>]```.
-6. Create tables with ```./backend.sh [-c <config-file>] --create-tables```. 
-7. Run the backend, ```./backend.sh [-c <config-file>] --run```. Do not run multiple copies at the same time!
-8. Run the frontend, ```grailsw run-app```.
+4. Generate backend config with  ```./grailsw [prod|dev|test|] configure-backend [<config-file>]```. For instructions on editing it, see <a href="https://github.com/Commentor/plotdata/wiki/Configuring-the-backend">Wiki: configuring the backend</a>.
+5. Create tables with ```./backend.sh [-c <config-file>] --create-tables```. 
+6. Run the backend, ```./backend.sh [-c <config-file>] --run```. Do not run multiple copies at the same time!
+7. Run the frontend, ```grailsw run-app```.
 
 <h2>Installation (long version)</h2>
 

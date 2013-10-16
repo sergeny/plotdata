@@ -5,6 +5,16 @@ import java.util.concurrent.TimeUnit
 import org.codehaus.groovy.runtime.MethodClosure
 
 
+/*
+ * The files BackendTask.groovy and BackendWatchdog.groovy implement a design pattern: a "Watchdog" watching over a "Task" run by an Executor.
+ * The implementation of the design pattern was taken from the blog http://blog.temposwc.com/2011/01/schedule-periodic-task-with-watchdog.html
+ * Also take a look at the follow-up post, periodic task+watchdog+generics, http://blog.temposwc.com/2011/01/periodic-task-and-watchdog-reusable-and.html
+ *
+ * However, this file also contains the core logic of the backend.
+ * 
+ */
+
+
 // BackendTask.groovy and BackendWatchdog.groovy
 // This code was originally taken from the blog http://blog.temposwc.com/2011/01/schedule-periodic-task-with-watchdog.html
 // Also take a look at the follow-up post, periodic task+watchdog+generics, http://blog.temposwc.com/2011/01/periodic-task-and-watchdog-reusable-and.html
@@ -34,8 +44,9 @@ public class BackendTask {
 		this.period = period
 		update = dataToUpdate
 		this.connectToSql = connectToSql 
-        total = 0;
-        startTotal = total;
+		
+        total = 0; // Temporary development/testing code
+        startTotal = total; // Temporary development/testing code
         start();
     }
 
@@ -103,6 +114,10 @@ public class BackendTask {
 		}
 	}
 
+	/*
+	 * TheTask.run() is the function that is actually doing the work. That is, it generates new data using the closures in the "config"
+	 * and then populates the database.
+	 */
     private class TheTask implements Runnable {	
         public void run() {
         	println "Running... "
@@ -142,15 +157,17 @@ public class BackendTask {
 				throw t
 			}
 		
-			// update object state on each execution
+			// NOTE: this is Temporary Debug/Test/Development code
+			// Kill the thread every once in a while and see if it recovers :-)
             total++;
             if (total > startTotal + 10) {
-                // generate an exception to simulate what might happen
+             
                 throw new IllegalStateException();
             }
         }
     }
  
+	// Temporary debug/development code
     public int getTotal() {
         return total;
     }

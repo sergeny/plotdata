@@ -55,16 +55,20 @@
 	
 			#chart-wrapper {
 				float: right;
-				position: relative;
 				width:75%;
+				padding-bottom: 2px;
+			}
+			
+			#chart-container { 
+				width:90%; 
+				height:400px;
+				margin: 0 auto;
 			}
 	
 		
-		
-
 
 			#page-body {
-				margin: 2em 1em 1.25em 4em;
+				margin: 1em 1em 0em 0em;
 			}
 			
 			#header {
@@ -110,15 +114,12 @@
 			</div>
 
 			<div id="chart-wrapper">
-			<div id="chart-container" style="position:relative; width:90%; height:400px; left:0px; top:37px; " ></div>
+			<div id="chart-container"></div>
 			</div>
 
 			<div id="all_series_menu" role="navigation">
 				<g:render template="/series/all_series_menu" model="[on_click_callback:'showSeries']" />
 			</div>
-				
-		
-		
 		</div>
 		
 	
@@ -127,7 +128,7 @@
 		<script src="http://code.highcharts.com/stock/highstock.js"  onload="console.log(123);"></script>
 		<script src="http://code.highcharts.com/stock/modules/exporting.js"  onload="console.log(456)"></script>
 		
-	
+		
 	
 	<!-- TRYING TO LOAD jQUERY and other libraries if offline... Not very successfully so far... 
 	Not sure if this is because of Highcharts or because of how Grails treats different types of files in web-app (assigning them different urls)-->			
@@ -292,9 +293,6 @@
 			});
 
 		}
-
-
-
 		</script>
 		
 		

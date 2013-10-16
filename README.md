@@ -10,7 +10,7 @@ The code in this repository is availabe under the <a href="http://www.gnu.org/li
 3. Edit ```DataSource.groovy``` and maybe ```BuildConfig.groovy``` to configure connection to MySQL.
 4. Generate backend config with  ```./grailsw [prod|dev|test|] configure-backend [<config-file>]```.
 6. Create tables with ```./backend.sh [-c <config-file>] --create-tables```. 
-7. Run the backend, ```./backend.sh [-c <config-file>] --run```.
+7. Run the backend, ```./backend.sh [-c <config-file>] --run```. Do not run multiple copies at the same time!
 8. Run the frontend, ```grailsw run-app```.
 
 <h2>Installation (long version)</h2>
@@ -72,10 +72,14 @@ Also check out
 ```
 
 11. Run the server:
+```
 ./backend.sh --run
+```
 By default you will be using BackendConfig_production.groovy in the current directory that was perhaps created at step 6.
 You can also specify a different file:
+```
 ./backend.sh -c /etc/BackendConfig.groovy --run
+```
 DO NOT RUN MULTIPLE BACKEND SERVERS AT THE SAME TIME. 
 
 12. Start the frontend with

@@ -109,7 +109,7 @@ if (options.'run') {
 	BackendWatchdog watchdog = new BackendWatchdog(task)
 	println "${task} ${watchdog}"
 	while (true) {
-		Thread.sleep(500)
-		println "Total: ${watchdog.getTask().getTotal()}"
+		Thread.sleep(1000)
+		println "main thread..."
 	}
 }

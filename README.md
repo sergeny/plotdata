@@ -1,13 +1,29 @@
-1. Assuming you have Java installed, download and install Groovy from http://groovy.codehaus.org/Download.
-Make sure you have PATH configure so you can just type 'groovy' from the command line.
+<h2>Installation (short version)</h2>
+1. Install Groovy and MySQL (or, theoretically, another SQL RDBMS). 
+2. Install Grails or let the Grails wrapper, ```grailsw```, do it for you. You can always use ```grailsw``` instead of ```grails```.
+3. Edit ```DataSource.groovy``` and maybe ```BuildConfig.groovy``` to configure connection to MySQL.
+4. Generate backend config with e.g. ```./grailsw prod configure-backend``` or ```./grailsw dev configure-backend /~/dev_config.groovy```.
+5. Look into the generated config and understand what it does.
+6. Create tables with ```./backend.sh [-c <config-file>] --create-tables```. 
+7. Run the backend, ```./backend.sh [-c <config-file>] --run```.
+8. Run the frontend, ```grailsw run-app```.
 
-2. Download and install Grails from http://grails.org/download.
+<h2>Installation (long version)</h2>
 
-3. It is a good idea to set the environment variables JAVA_HOME, GROOVY_HOME, and GRAILS_HOME, though the Grails Wrapper may be able to help you with that.
+<h3> Dependencies</h3>
 
-4. For everything that follows, use the grails wrapper "grailsw", if you are on unix, or "grailsw.bat", if you are on Windows.
+1. Install Groovy from http://groovy.codehaus.org/Download. 
 
-5. Install a database such as MySQL with InnoDB, or anything else supported by Grails. You cannot use a default in-memory database as the backend won't be able to write to it. (You may be able to use the default H2 database configured to save data to a file on the hard drive. This wasn't tested yet, though.) Actually run the database server. Create users for it and make sure that everything works.
+2. No need to install Grails, just use the Grails Wrapper, ```grailsw``` instead of ```grails```, and it will download Grails for you.
+
+3. Or download and install Grails from http://grails.org/download.
+
+4. Try to run ```grailsw``` (or ```grails```) and ```groovy``` from the command line. If necessary, set ```JAVA_HOME```, ```GROOVY_HOME```, ```GRAILS_HOME```.
+
+5. Install a database server. MySQL is recommended, though in theory you should be able to substitute any other database supported by Grails. (Some manual reconfiguration may be involved.)
+Run the database servers, create users; make sure that everything works.
+
+<h3> Configuration </h3>
 
 6. Configure connection to a database by manually editing grails-app/conf/DataSource.groovy.
 Note that you can have different settings for "development", "test", and "production". 

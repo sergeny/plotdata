@@ -1,7 +1,7 @@
 class UrlMappings {
 
 	static mappings = {
-		"/series/json/$type?/$name?" {
+		"/series/json/$type?/$name?/$strictlyafter?" {
 			controller = "series"
 			action = "json"
 		}

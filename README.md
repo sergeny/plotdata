@@ -23,7 +23,7 @@ and/or for a particular environment.
 
 
 8. Here you will see if your configuration is working.
-Autoatically configure the backend by running "grailsw configure-backend" from the main grails directory.
+Automatically configure the backend by running "grailsw configure-backend" from the main grails directory.
 You can also specify one of
 ```shell
 ./grailsw dev configure-backend
@@ -38,7 +38,9 @@ grailsw configure-backend /etc/BackendConfig.groovy
 
 After that you can freely change the username/password in DataSource.groovy if you want the backend and the frontend to use different usernames for connecting to the database. (Perhaps so the frontend would have read-only rights.)
 
-9. Use the script backend.sh to create tables in the SQL database:
+9. It is important to understand that this "configuration" contains arbitrary Groovy code! It also has all the information about the data that the backend will collect and the frontend will publish. Feel free to edit this file to add other sources of data. Anything that can be put in a Groovy closure can be used, any Groovy code whatsoever!
+
+10. Use the script backend.sh to create tables in the SQL database:
 ```shell
 ./backend.sh --create-tables
 ```
@@ -47,18 +49,18 @@ Also check out
 ./backend.sh -h or ./backend.sh --help
 ```
 
-10. Run the server:
+11. Run the server:
 ./backend.sh --run
 By default you will be using BackendConfig_production.groovy in the current directory that was perhaps created at step 6.
 You can also specify a different file:
 ./backend.sh -c /etc/BackendConfig.groovy --run
 DO NOT RUN MULTIPLE BACKEND SERVERS AT THE SAME TIME. 
 
-11. Start the frontend with
+12. Start the frontend with
 ```
 grailsw run-app
 ```
 
-12. Navigate to http://localhost:8080/plotdata/
+13. Navigate to http://localhost:8080/plotdata/
 
 

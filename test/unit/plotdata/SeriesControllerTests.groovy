@@ -12,7 +12,7 @@ import org.junit.*
 class SeriesControllerTests {
 
     void testSomething() {
-       SeriesController.json(7)
+        controller.json()
 		//fail "Implement me"
     }
 }

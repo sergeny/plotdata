@@ -120,7 +120,7 @@ public class BackendTask {
 	 */
     private class TheTask implements Runnable {	
         public void run() {
-        	println "Running... "
+        	println "  working thread - TheTask.run()..."
     	
 			
 			// First compute all the new values, then put all of them to a database
@@ -137,7 +137,7 @@ public class BackendTask {
 		        }
 		    }
 		
-			println "${new_values}"
+			println "    collected new data : ${new_values}"
 			
 			try {
 			def sql = this.connectToSql()
@@ -146,12 +146,13 @@ public class BackendTask {
 					name, p ->  // p[0] - timestamp, p[1] - value
 						// The JDBC '?'-syntax protects against SQL injection
 						def params = [seriesId(sql, s_type, name)] + p // Important to call seriesId, which does SELECT and/or INSERT, before doing INSERT
-						println "READY TO INSERT $params"
+						print "    sql insert $params... "
 						sql.execute "INSERT INTO ${POINTS_TABLE} (${SERIES_TABLE}_id, time, value) VALUE (?, ?, ?)", params
 						println "inserted $sql.updateCount"
 				}
 			}
 			sql.close()
+			println "    OK, sql closed"
 			} catch (Throwable t) {
 				println "$t"
 				throw t
@@ -160,10 +161,12 @@ public class BackendTask {
 			// NOTE: this is Temporary Debug/Test/Development code
 			// Kill the thread every once in a while and see if it recovers :-)
             total++;
+		
             if (total > startTotal + 10) {
-             
+             	println "KILLING THE WORKING THREAD FOR TESTING --- SEE IF IT RECOVERS!"
                 throw new IllegalStateException();
             }
+			println "  working thread - TheTask.run() done"
         }
     }
  
